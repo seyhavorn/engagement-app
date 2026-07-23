@@ -762,7 +762,7 @@ const coupleImages = [
           <iframe
             src="https://maps.google.com/maps?q=11.164417,104.904918&z=16&output=embed"
             class="w-full h-64 border-0"
-            allowfullscreen=""
+            :allowfullscreen="true"
             loading="lazy"
           ></iframe>
         </div>
@@ -782,6 +782,13 @@ const coupleImages = [
           </a>
         </div>
       </div>
+    </div>
+
+    <!-- Developer Footer Credit -->
+    <div class="relative z-10 mt-2 mb-6 text-center select-none">
+      <p class="font-body text-[10px] sm:text-xs text-primary/60 tracking-wider">
+        Created by <span class="font-semibold text-secondary-dark">Seyha VORN</span> (Senior Software Engineer)
+      </p>
     </div>
 
     <!-- RSVP Modal -->
