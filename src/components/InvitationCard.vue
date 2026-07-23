@@ -24,12 +24,12 @@ const googleMapsUrl = 'https://maps.app.goo.gl/ArXiX3o1sq2NTui99';
 // ── Gallery State ──
 const activeImageIndex = ref(0);
 const coupleImages = [
-  `${import.meta.env.BASE_URL}images/seyha_david_1.jpg`,
-  `${import.meta.env.BASE_URL}images/seyha_david_2.JPG`,
-  `${import.meta.env.BASE_URL}images/seyha_david_3.jpg`,
-  `${import.meta.env.BASE_URL}images/seyha_david_4.JPG`,
-  `${import.meta.env.BASE_URL}images/seyha_david_5.jpg`,
-  `${import.meta.env.BASE_URL}images/seyha_david_6.jpg`,
+  `/images/seyha_david_1.jpg`,
+  `/images/seyha_david_2.JPG`,
+  `/images/seyha_david_3.jpg`,
+  `/images/seyha_david_4.JPG`,
+  `/images/seyha_david_5.jpg`,
+  `/images/seyha_david_6.jpg`,
 ];
 
 const carouselContainer = ref<HTMLElement | null>(null);
@@ -100,7 +100,9 @@ const onMouseMove = (e: MouseEvent) => {
     <!-- Background Image with Soft Texture -->
     <div
       class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 opacity-60"
-      :style="{ backgroundImage: `url(${import.meta.env.BASE_URL}bg-silk.png)` }"
+      :style="{
+        backgroundImage: `url(/bg-silk.png)`,
+      }"
     />
     <!-- Light Ivory overlay -->
     <div class="absolute inset-0 bg-[#FFFDF8]/70 backdrop-blur-[2px]" />
@@ -769,15 +771,13 @@ const onMouseMove = (e: MouseEvent) => {
           </div>
         </div>
 
-        <!-- Single Horizontal Row of All Couple Images as Thumbnails -->
-        <div
-          class="flex gap-2.5 overflow-x-auto pb-1 mt-4 scrollbar-thin scrollbar-thumb-secondary/35 scroll-smooth snap-x select-none"
-        >
+        <!-- Single Row Grid of All Couple Images as Thumbnails -->
+        <div class="grid grid-cols-6 gap-2 w-full mt-4 select-none">
           <button
             v-for="(img, idx) in coupleImages"
             :key="idx"
             @click="scrollToImage(idx)"
-            class="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-lg overflow-hidden border-2 transition-all duration-300 snap-center"
+            class="relative aspect-square w-full rounded-lg overflow-hidden border-2 transition-all duration-300"
             :class="
               activeImageIndex === idx
                 ? 'border-secondary shadow-md scale-105'
