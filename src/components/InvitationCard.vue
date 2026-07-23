@@ -25,12 +25,12 @@ const googleMapsUrl =
 // ── Gallery State ──
 const activeImageIndex = ref(0);
 const coupleImages = [
-  '/images/seyha_david_1.jpg',
-  '/images/seyha_david_2.JPG',
-  '/images/seyha_david_3.jpg',
-  '/images/seyha_david_4.JPG',
-  '/images/seyha_david_5.jpg',
-  '/images/seyha_david_6.jpg',
+  'images/seyha_david_1.jpg',
+  'images/seyha_david_2.JPG',
+  'images/seyha_david_3.jpg',
+  'images/seyha_david_4.JPG',
+  'images/seyha_david_5.jpg',
+  'images/seyha_david_6.jpg',
 ];
 </script>
 
@@ -41,7 +41,7 @@ const coupleImages = [
     <!-- Background Image with Soft Texture -->
     <div
       class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 opacity-60"
-      style="background-image: url('/bg-silk.png')"
+      style="background-image: url('bg-silk.png')"
     />
     <!-- Light Ivory overlay -->
     <div class="absolute inset-0 bg-[#FFFDF8]/70 backdrop-blur-[2px]" />
