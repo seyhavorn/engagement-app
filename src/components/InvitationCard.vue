@@ -19,29 +19,88 @@ const venueAddress = 'ឃុំចម្ប៉ា ស្រុកព្រៃក
 const invitationMessage =
   'បេះដូងពីរ ស្នេហាមួយ ការចាប់ផ្តើមដ៏ស្រស់ស្អាតមួយ។ យើងខ្ញុំសូមអញ្ជើញលោក លោកស្រី អ្នកនាង កញ្ញា មកចូលរួមអបអរសាទរក្នុងពិធីភ្ជាប់ពាក្យរបស់យើងខ្ញុំ ដើម្បីជាសាក្សីនៃការចាប់ផ្តើមនៃស្នេហាដ៏អស់កល្បរបស់យើង។';
 const countdownTarget = '2026-08-22T08:00:00';
-const googleMapsUrl =
-  'https://maps.app.goo.gl/ArXiX3o1sq2NTui99';
+const googleMapsUrl = 'https://maps.app.goo.gl/ArXiX3o1sq2NTui99';
 
 // ── Gallery State ──
 const activeImageIndex = ref(0);
 const coupleImages = [
-  'images/seyha_david_1.jpg',
-  'images/seyha_david_2.JPG',
-  'images/seyha_david_3.jpg',
-  'images/seyha_david_4.JPG',
-  'images/seyha_david_5.jpg',
-  'images/seyha_david_6.jpg',
+  `${import.meta.env.BASE_URL}images/seyha_david_1.jpg`,
+  `${import.meta.env.BASE_URL}images/seyha_david_2.JPG`,
+  `${import.meta.env.BASE_URL}images/seyha_david_3.jpg`,
+  `${import.meta.env.BASE_URL}images/seyha_david_4.JPG`,
+  `${import.meta.env.BASE_URL}images/seyha_david_5.jpg`,
+  `${import.meta.env.BASE_URL}images/seyha_david_6.jpg`,
 ];
+
+const carouselContainer = ref<HTMLElement | null>(null);
+
+const handleCarouselScroll = (e: Event) => {
+  const container = e.target as HTMLElement;
+  const width = container.clientWidth;
+  if (width > 0) {
+    activeImageIndex.value = Math.round(container.scrollLeft / width);
+  }
+};
+
+const scrollToImage = (idx: number) => {
+  activeImageIndex.value = idx;
+  if (carouselContainer.value) {
+    const width = carouselContainer.value.clientWidth;
+    carouselContainer.value.scrollTo({
+      left: idx * width,
+      behavior: 'smooth',
+    });
+  }
+};
+
+// ── Drag to Scroll on Desktop ──
+const isDragging = ref(false);
+const startX = ref(0);
+const scrollLeftVal = ref(0);
+
+const onMouseDown = (e: MouseEvent) => {
+  const container = e.currentTarget as HTMLElement;
+  isDragging.value = true;
+  startX.value = e.pageX - container.offsetLeft;
+  scrollLeftVal.value = container.scrollLeft;
+};
+
+const onMouseLeave = () => {
+  isDragging.value = false;
+};
+
+const onMouseUp = (e: MouseEvent) => {
+  isDragging.value = false;
+  const container = e.currentTarget as HTMLElement;
+
+  // Snap to nearest slide
+  const width = container.clientWidth;
+  const snapIndex = Math.round(container.scrollLeft / width);
+  container.scrollTo({
+    left: snapIndex * width,
+    behavior: 'smooth',
+  });
+};
+
+const onMouseMove = (e: MouseEvent) => {
+  if (!isDragging.value) return;
+  e.preventDefault();
+  const container = e.currentTarget as HTMLElement;
+  const x = e.pageX - container.offsetLeft;
+  const walk = (x - startX.value) * 1.5;
+  container.scrollLeft = scrollLeftVal.value - walk;
+};
 </script>
 
 <template>
   <div
     class="relative min-h-screen min-h-[100dvh] w-full flex flex-col items-center justify-start overflow-x-hidden py-8 px-3 sm:py-12 sm:px-6 gap-8 sm:gap-12"
+    style="overflow-y: auto; -webkit-overflow-scrolling: touch"
   >
     <!-- Background Image with Soft Texture -->
     <div
       class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 opacity-60"
-      style="background-image: url('bg-silk.png')"
+      :style="{ backgroundImage: `url(${import.meta.env.BASE_URL}bg-silk.png)` }"
     />
     <!-- Light Ivory overlay -->
     <div class="absolute inset-0 bg-[#FFFDF8]/70 backdrop-blur-[2px]" />
@@ -658,28 +717,67 @@ const coupleImages = [
           </div>
         </div>
 
-        <!-- Featured Couple Image -->
+        <!-- Swipeable Featured Couple Images Carousel -->
         <div
-          class="relative aspect-[3/4] w-full rounded-2xl border-2 border-secondary/40 overflow-hidden shadow-md mb-5 group bg-black/5"
+          class="relative w-full aspect-[3/4] rounded-2xl border-2 border-secondary/40 overflow-hidden shadow-md mb-4 bg-[#1E1816]"
         >
-          <img
-            :src="coupleImages[activeImageIndex]"
-            alt="Seyha & David"
-            class="w-full h-full object-cover transition-all duration-700 ease-in-out group-hover:scale-105"
-          />
-          <!-- Image overlay shade -->
+          <!-- Horizontally Scrollable Container for Large Images -->
           <div
-            class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"
-          />
+            ref="carouselContainer"
+            @scroll="handleCarouselScroll"
+            @mousedown="onMouseDown"
+            @mouseleave="onMouseLeave"
+            @mouseup="onMouseUp"
+            @mousemove="onMouseMove"
+            class="flex w-full h-full overflow-x-auto snap-x snap-mandatory scroll-smooth pb-0 scrollbar-none cursor-grab active:cursor-grabbing select-none"
+            style="
+              -webkit-overflow-scrolling: touch;
+              scrollbar-width: none;
+              -ms-overflow-style: none;
+            "
+          >
+            <div
+              v-for="(img, idx) in coupleImages"
+              :key="idx"
+              class="w-full h-full shrink-0 snap-center relative"
+            >
+              <img
+                :src="img"
+                alt="Seyha & David"
+                class="w-full h-full object-contain sm:object-cover select-none"
+                draggable="false"
+              />
+              <!-- Image overlay shade -->
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"
+              />
+            </div>
+          </div>
+
+          <!-- Bottom Carousel Page Indicator Dots -->
+          <div
+            class="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-20"
+          >
+            <span
+              v-for="(_, idx) in coupleImages"
+              :key="idx"
+              class="w-1.5 h-1.5 rounded-full transition-all duration-300"
+              :class="
+                activeImageIndex === idx ? 'bg-secondary w-3.5' : 'bg-white/65'
+              "
+            />
+          </div>
         </div>
 
-        <!-- Symmetrical Photo Thumbnails Grid -->
-        <div class="grid grid-cols-6 gap-2">
+        <!-- Single Horizontal Row of All Couple Images as Thumbnails -->
+        <div
+          class="flex gap-2.5 overflow-x-auto pb-1 mt-4 scrollbar-thin scrollbar-thumb-secondary/35 scroll-smooth snap-x select-none"
+        >
           <button
             v-for="(img, idx) in coupleImages"
             :key="idx"
-            @click="activeImageIndex = idx"
-            class="relative aspect-square rounded-lg overflow-hidden border-2 transition-all duration-300 select-none overflow-hidden"
+            @click="scrollToImage(idx)"
+            class="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-lg overflow-hidden border-2 transition-all duration-300 snap-center"
             :class="
               activeImageIndex === idx
                 ? 'border-secondary shadow-md scale-105'
@@ -710,22 +808,38 @@ const coupleImages = [
       />
 
       <!-- Four Frame Corner Ornaments (Top-Left) -->
-      <svg class="absolute top-3 left-3 w-6 h-6 text-secondary pointer-events-none z-20 opacity-80" viewBox="0 0 24 24" fill="currentColor">
+      <svg
+        class="absolute top-3 left-3 w-6 h-6 text-secondary pointer-events-none z-20 opacity-80"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
         <path d="M2 2h8v2H4v6H2V2zm4 4h4v2H6v2H4V6h2z" />
         <circle cx="3" cy="3" r="1.5" />
       </svg>
       <!-- Four Frame Corner Ornaments (Top-Right) -->
-      <svg class="absolute top-3 right-3 w-6 h-6 text-secondary pointer-events-none z-20 opacity-80" viewBox="0 0 24 24" fill="currentColor">
+      <svg
+        class="absolute top-3 right-3 w-6 h-6 text-secondary pointer-events-none z-20 opacity-80"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
         <path d="M22 2h-8v2h6v6h2V2zm-4 4h-4v2h4v2h2V6h-2z" />
         <circle cx="21" cy="3" r="1.5" />
       </svg>
       <!-- Four Frame Corner Ornaments (Bottom-Left) -->
-      <svg class="absolute bottom-3 left-3 w-6 h-6 text-secondary pointer-events-none z-20 opacity-80" viewBox="0 0 24 24" fill="currentColor">
+      <svg
+        class="absolute bottom-3 left-3 w-6 h-6 text-secondary pointer-events-none z-20 opacity-80"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
         <path d="M2 22h8v-2H4v-6H2v8zm4-4h4v-2H6v-2H4v4h2z" />
         <circle cx="3" cy="21" r="1.5" />
       </svg>
       <!-- Four Frame Corner Ornaments (Bottom-Right) -->
-      <svg class="absolute bottom-3 right-3 w-6 h-6 text-secondary pointer-events-none z-20 opacity-80" viewBox="0 0 24 24" fill="currentColor">
+      <svg
+        class="absolute bottom-3 right-3 w-6 h-6 text-secondary pointer-events-none z-20 opacity-80"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
         <path d="M22 22h-8v-2h6v-6h2v8zm-4-4h-4v-2h4v-2h2v4h-2z" />
         <circle cx="21" cy="21" r="1.5" />
       </svg>
@@ -734,10 +848,14 @@ const coupleImages = [
       <div class="relative z-10 px-6 py-8 sm:px-10 sm:py-11 text-center">
         <!-- Title: ទីតាំងកម្មវិធី -->
         <div class="fade-in mb-5">
-          <h2 class="font-heading text-lg sm:text-xl tracking-wide text-primary font-normal">
+          <h2
+            class="font-heading text-lg sm:text-xl tracking-wide text-primary font-normal"
+          >
             ទីតាំងកម្មវិធី
           </h2>
-          <p class="font-body text-[10px] sm:text-xs text-secondary font-medium tracking-widest uppercase mt-0.5">
+          <p
+            class="font-body text-[10px] sm:text-xs text-secondary font-medium tracking-widest uppercase mt-0.5"
+          >
             Event Location
           </p>
           <div class="flex items-center justify-center gap-2 mt-2 opacity-60">
@@ -758,7 +876,9 @@ const coupleImages = [
         </div>
 
         <!-- Embedded Google Map -->
-        <div class="relative w-full rounded-2xl border-2 border-secondary/40 overflow-hidden shadow-md mb-5">
+        <div
+          class="relative w-full rounded-2xl border-2 border-secondary/40 overflow-hidden shadow-md mb-5"
+        >
           <iframe
             src="https://maps.google.com/maps?q=11.164417,104.904918&z=16&output=embed"
             class="w-full h-64 border-0"
@@ -776,7 +896,9 @@ const coupleImages = [
             class="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-secondary-dark via-secondary to-secondary-dark text-white font-body text-xs sm:text-sm font-medium tracking-wide shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
           >
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+              <path
+                d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+              />
             </svg>
             មើលផែនទីស្វែងរកផ្លូវ
           </a>
@@ -786,8 +908,12 @@ const coupleImages = [
 
     <!-- Developer Footer Credit -->
     <div class="relative z-10 mt-2 mb-6 text-center select-none">
-      <p class="font-body text-[10px] sm:text-xs text-primary/60 tracking-wider">
-        Created by <span class="font-semibold text-secondary-dark">Seyha VORN</span> (Senior Software Engineer)
+      <p
+        class="font-body text-[10px] sm:text-xs text-primary/60 tracking-wider"
+      >
+        Created by
+        <span class="font-semibold text-secondary-dark">Seyha VORN</span>
+        (Lead Software Engineer)
       </p>
     </div>
 
