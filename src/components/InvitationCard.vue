@@ -25,7 +25,7 @@ const googleMapsUrl =
 
 <template>
   <div
-    class="relative min-h-screen min-h-[100dvh] w-full flex items-center justify-center overflow-x-hidden p-3 sm:p-6"
+    class="relative min-h-screen min-h-[100dvh] w-full flex items-center justify-center overflow-x-hidden py-8 px-3 sm:py-12 sm:px-6"
   >
     <!-- Background Image with Soft Texture -->
     <div
