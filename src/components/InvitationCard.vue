@@ -14,18 +14,29 @@ const groomName = 'វន សីហា';
 const brideName = 'សួង ដាវីត';
 const eventDate = 'ថ្ងៃសៅរ៍ ទី២២ ខែសីហា ឆ្នាំ២០២៦';
 const eventTime = 'ម៉ោង ៨:០០ ព្រឹក';
-const venueName = 'The Grand Rosewood Estate';
-const venueAddress = '128 Blossom Lane, Beverly Hills, CA 90210';
+const venueName = 'គេហដ្ឋានខាងស្រី';
+const venueAddress = 'ឃុំចម្ប៉ា ស្រុកព្រៃកប្បាស ខេត្តតាកែវ';
 const invitationMessage =
   'បេះដូងពីរ ស្នេហាមួយ ការចាប់ផ្តើមដ៏ស្រស់ស្អាតមួយ។ យើងខ្ញុំសូមអញ្ជើញលោក លោកស្រី អ្នកនាង កញ្ញា មកចូលរួមអបអរសាទរក្នុងពិធីភ្ជាប់ពាក្យរបស់យើងខ្ញុំ ដើម្បីជាសាក្សីនៃការចាប់ផ្តើមនៃស្នេហាដ៏អស់កល្បរបស់យើង។';
 const countdownTarget = '2026-08-22T08:00:00';
 const googleMapsUrl =
-  'https://maps.google.com/?q=The+Grand+Rosewood+Estate+Beverly+Hills';
+  'https://maps.app.goo.gl/ArXiX3o1sq2NTui99';
+
+// ── Gallery State ──
+const activeImageIndex = ref(0);
+const coupleImages = [
+  '/images/seyha_david_1.jpg',
+  '/images/seyha_david_2.JPG',
+  '/images/seyha_david_3.jpg',
+  '/images/seyha_david_4.JPG',
+  '/images/seyha_david_5.jpg',
+  '/images/seyha_david_6.jpg',
+];
 </script>
 
 <template>
   <div
-    class="relative min-h-screen min-h-[100dvh] w-full flex items-center justify-center overflow-x-hidden py-8 px-3 sm:py-12 sm:px-6"
+    class="relative min-h-screen min-h-[100dvh] w-full flex flex-col items-center justify-start overflow-x-hidden py-8 px-3 sm:py-12 sm:px-6 gap-8 sm:gap-12"
   >
     <!-- Background Image with Soft Texture -->
     <div
@@ -572,6 +583,203 @@ const googleMapsUrl =
           >
             យើងខ្ញុំរង់ចាំទទួលស្វាគមន៍លោកអ្នកដោយក្តីរីករាយ!
           </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Gallery Card ─── -->
+    <div
+      class="relative z-10 w-full max-w-[480px] mx-auto bg-[#FFFDF8]/95 backdrop-blur-md rounded-[28px] sm:rounded-[36px] shadow-[0_12px_60px_rgba(197,160,70,0.12),0_4px_25px_rgba(0,0,0,0.04)] border-2 border-secondary/30 overflow-hidden fade-in-up"
+    >
+      <!-- Double Inner Border Frame Layer 1 -->
+      <div
+        class="absolute inset-[8px] rounded-[24px] sm:rounded-[32px] border-2 border-secondary/30 pointer-events-none z-10"
+      />
+      <!-- Double Inner Border Frame Layer 2 -->
+      <div
+        class="absolute inset-[14px] rounded-[18px] sm:rounded-[26px] border border-secondary/20 pointer-events-none z-10"
+      />
+
+      <!-- Four Frame Corner Ornaments (Top-Left) -->
+      <svg
+        class="absolute top-3 left-3 w-6 h-6 text-secondary pointer-events-none z-20 opacity-80"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path d="M2 2h8v2H4v6H2V2zm4 4h4v2H6v2H4V6h2z" />
+        <circle cx="3" cy="3" r="1.5" />
+      </svg>
+      <!-- Four Frame Corner Ornaments (Top-Right) -->
+      <svg
+        class="absolute top-3 right-3 w-6 h-6 text-secondary pointer-events-none z-20 opacity-80"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path d="M22 2h-8v2h6v6h2V2zm-4 4h-4v2h4v2h2V6h-2z" />
+        <circle cx="21" cy="3" r="1.5" />
+      </svg>
+      <!-- Four Frame Corner Ornaments (Bottom-Left) -->
+      <svg
+        class="absolute bottom-3 left-3 w-6 h-6 text-secondary pointer-events-none z-20 opacity-80"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path d="M2 22h8v-2H4v-6H2v8zm4-4h4v-2H6v-2H4v4h2z" />
+        <circle cx="3" cy="21" r="1.5" />
+      </svg>
+      <!-- Four Frame Corner Ornaments (Bottom-Right) -->
+      <svg
+        class="absolute bottom-3 right-3 w-6 h-6 text-secondary pointer-events-none z-20 opacity-80"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path d="M22 22h-8v-2h6v-6h2v8zm-4-4h-4v-2h4v-2h2v4h-2z" />
+        <circle cx="21" cy="21" r="1.5" />
+      </svg>
+
+      <!-- Card Main Content Container -->
+      <div class="relative z-10 px-6 py-8 sm:px-10 sm:py-11 text-center">
+        <!-- Title: រូបភាពអនុស្សាវរីយ៍ -->
+        <div class="fade-in mb-5">
+          <h2
+            class="font-heading text-lg sm:text-xl tracking-wide text-primary font-normal"
+          >
+            រូបភាពអនុស្សាវរីយ៍
+          </h2>
+          <p
+            class="font-body text-[10px] sm:text-xs text-secondary font-medium tracking-widest uppercase mt-0.5"
+          >
+            Gallery of Love
+          </p>
+          <div class="flex items-center justify-center gap-2 mt-2 opacity-60">
+            <div class="h-[1px] w-8 bg-secondary" />
+            <div class="w-1.5 h-1.5 rounded-full bg-secondary" />
+            <div class="h-[1px] w-8 bg-secondary" />
+          </div>
+        </div>
+
+        <!-- Featured Couple Image -->
+        <div
+          class="relative aspect-[3/4] w-full rounded-2xl border-2 border-secondary/40 overflow-hidden shadow-md mb-5 group bg-black/5"
+        >
+          <img
+            :src="coupleImages[activeImageIndex]"
+            alt="Seyha & David"
+            class="w-full h-full object-cover transition-all duration-700 ease-in-out group-hover:scale-105"
+          />
+          <!-- Image overlay shade -->
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"
+          />
+        </div>
+
+        <!-- Symmetrical Photo Thumbnails Grid -->
+        <div class="grid grid-cols-6 gap-2">
+          <button
+            v-for="(img, idx) in coupleImages"
+            :key="idx"
+            @click="activeImageIndex = idx"
+            class="relative aspect-square rounded-lg overflow-hidden border-2 transition-all duration-300 select-none overflow-hidden"
+            :class="
+              activeImageIndex === idx
+                ? 'border-secondary shadow-md scale-105'
+                : 'border-secondary/20 hover:border-secondary/50 hover:scale-102'
+            "
+          >
+            <img
+              :src="img"
+              alt="Thumbnail"
+              class="w-full h-full object-cover pointer-events-none"
+            />
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Location & Map Card ─── -->
+    <div
+      class="relative z-10 w-full max-w-[480px] mx-auto bg-[#FFFDF8]/95 backdrop-blur-md rounded-[28px] sm:rounded-[36px] shadow-[0_12px_60px_rgba(197,160,70,0.12),0_4px_25px_rgba(0,0,0,0.04)] border-2 border-secondary/30 overflow-hidden fade-in-up"
+    >
+      <!-- Double Inner Border Frame Layer 1 -->
+      <div
+        class="absolute inset-[8px] rounded-[24px] sm:rounded-[32px] border-2 border-secondary/30 pointer-events-none z-10"
+      />
+      <!-- Double Inner Border Frame Layer 2 -->
+      <div
+        class="absolute inset-[14px] rounded-[18px] sm:rounded-[26px] border border-secondary/20 pointer-events-none z-10"
+      />
+
+      <!-- Four Frame Corner Ornaments (Top-Left) -->
+      <svg class="absolute top-3 left-3 w-6 h-6 text-secondary pointer-events-none z-20 opacity-80" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M2 2h8v2H4v6H2V2zm4 4h4v2H6v2H4V6h2z" />
+        <circle cx="3" cy="3" r="1.5" />
+      </svg>
+      <!-- Four Frame Corner Ornaments (Top-Right) -->
+      <svg class="absolute top-3 right-3 w-6 h-6 text-secondary pointer-events-none z-20 opacity-80" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M22 2h-8v2h6v6h2V2zm-4 4h-4v2h4v2h2V6h-2z" />
+        <circle cx="21" cy="3" r="1.5" />
+      </svg>
+      <!-- Four Frame Corner Ornaments (Bottom-Left) -->
+      <svg class="absolute bottom-3 left-3 w-6 h-6 text-secondary pointer-events-none z-20 opacity-80" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M2 22h8v-2H4v-6H2v8zm4-4h4v-2H6v-2H4v4h2z" />
+        <circle cx="3" cy="21" r="1.5" />
+      </svg>
+      <!-- Four Frame Corner Ornaments (Bottom-Right) -->
+      <svg class="absolute bottom-3 right-3 w-6 h-6 text-secondary pointer-events-none z-20 opacity-80" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M22 22h-8v-2h6v-6h2v8zm-4-4h-4v-2h4v-2h2v4h-2z" />
+        <circle cx="21" cy="21" r="1.5" />
+      </svg>
+
+      <!-- Card Main Content Container -->
+      <div class="relative z-10 px-6 py-8 sm:px-10 sm:py-11 text-center">
+        <!-- Title: ទីតាំងកម្មវិធី -->
+        <div class="fade-in mb-5">
+          <h2 class="font-heading text-lg sm:text-xl tracking-wide text-primary font-normal">
+            ទីតាំងកម្មវិធី
+          </h2>
+          <p class="font-body text-[10px] sm:text-xs text-secondary font-medium tracking-widest uppercase mt-0.5">
+            Event Location
+          </p>
+          <div class="flex items-center justify-center gap-2 mt-2 opacity-60">
+            <div class="h-[1px] w-8 bg-secondary" />
+            <div class="w-1.5 h-1.5 rounded-full bg-secondary" />
+            <div class="h-[1px] w-8 bg-secondary" />
+          </div>
+        </div>
+
+        <!-- Venue details -->
+        <div class="mb-5">
+          <p class="font-accent text-sm sm:text-base text-primary font-bold">
+            {{ venueName }}
+          </p>
+          <p class="font-body text-xs text-primary-muted mt-1 max-w-xs mx-auto">
+            {{ venueAddress }}
+          </p>
+        </div>
+
+        <!-- Embedded Google Map -->
+        <div class="relative w-full rounded-2xl border-2 border-secondary/40 overflow-hidden shadow-md mb-5">
+          <iframe
+            src="https://maps.google.com/maps?q=11.164417,104.904918&z=16&output=embed"
+            class="w-full h-64 border-0"
+            allowfullscreen=""
+            loading="lazy"
+          ></iframe>
+        </div>
+
+        <!-- Directions link -->
+        <div>
+          <a
+            :href="googleMapsUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-secondary-dark via-secondary to-secondary-dark text-white font-body text-xs sm:text-sm font-medium tracking-wide shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+            </svg>
+            មើលផែនទីស្វែងរកផ្លូវ
+          </a>
         </div>
       </div>
     </div>
