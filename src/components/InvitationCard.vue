@@ -881,7 +881,7 @@ const onMouseMove = (e: MouseEvent) => {
         >
           <iframe
             src="https://maps.google.com/maps?q=11.164417,104.904918&z=16&output=embed"
-            class="w-full h-64 border-0"
+            class="w-full h-94 border-0"
             :allowfullscreen="true"
             loading="lazy"
           ></iframe>
