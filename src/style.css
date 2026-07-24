@@ -96,6 +96,23 @@ input, textarea, select {
   animation: fadeIn 1.5s ease-out both;
 }
 
+/* ── Luxury Scroll Reveal Animations ────────────────────────────── */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(40px) scale(0.96) rotateX(6deg);
+  filter: blur(4px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), 
+              filter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform, filter;
+}
+
+.reveal-on-scroll.is-revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1) rotateX(0deg);
+  filter: blur(0px);
+}
+
 .fade-in-delay-1 { animation-delay: 0.2s; }
 .fade-in-delay-2 { animation-delay: 0.4s; }
 .fade-in-delay-3 { animation-delay: 0.6s; }

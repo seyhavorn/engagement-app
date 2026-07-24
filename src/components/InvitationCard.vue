@@ -149,12 +149,35 @@ const stopGalleryAutoplay = () => {
   }
 };
 
+let observer: IntersectionObserver | undefined;
+
 onMounted(() => {
   startGalleryAutoplay();
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-revealed');
+        }
+      });
+    },
+    {
+      threshold: 0.08,
+      rootMargin: '0px 0px -40px 0px',
+    }
+  );
+
+  document.querySelectorAll('.reveal-on-scroll').forEach((el) => {
+    observer?.observe(el);
+  });
 });
 
 onUnmounted(() => {
   stopGalleryAutoplay();
+  if (observer) {
+    observer.disconnect();
+  }
 });
 </script>
 
@@ -651,9 +674,7 @@ onUnmounted(() => {
               />
             </svg>
           </div>
-          <p
-            class="font-accent text-xs tracking-wide text-primary font-bold"
-          >
+          <p class="font-accent text-xs tracking-wide text-primary font-bold">
             {{ venueName }}
           </p>
           <p
@@ -726,7 +747,7 @@ onUnmounted(() => {
 
     <!-- ─── Event Schedule Timeline Card (Standalone) ─── -->
     <div
-      class="relative z-10 w-full max-w-[430px] mx-auto bg-[#FFFDF8]/95 backdrop-blur-md rounded-[28px] sm:rounded-[36px] shadow-[0_12px_60px_rgba(197,160,70,0.12),0_4px_25px_rgba(0,0,0,0.04)] border-2 border-secondary/30 overflow-hidden fade-in-up"
+      class="relative z-10 w-full max-w-[430px] mx-auto bg-[#FFFDF8]/95 backdrop-blur-md rounded-[28px] sm:rounded-[36px] shadow-[0_12px_60px_rgba(197,160,70,0.12),0_4px_25px_rgba(0,0,0,0.04)] border-2 border-secondary/30 overflow-hidden reveal-on-scroll"
     >
       <!-- Double Inner Border Frame Layer 1 -->
       <div
@@ -782,7 +803,7 @@ onUnmounted(() => {
 
     <!-- ─── Gallery Card ─── -->
     <div
-      class="relative z-10 w-full max-w-[430px] mx-auto bg-[#FFFDF8]/95 backdrop-blur-md rounded-[28px] sm:rounded-[36px] shadow-[0_12px_60px_rgba(197,160,70,0.12),0_4px_25px_rgba(0,0,0,0.04)] border-2 border-secondary/30 overflow-hidden fade-in-up"
+      class="relative z-10 w-full max-w-[430px] mx-auto bg-[#FFFDF8]/95 backdrop-blur-md rounded-[28px] sm:rounded-[36px] shadow-[0_12px_60px_rgba(197,160,70,0.12),0_4px_25px_rgba(0,0,0,0.04)] border-2 border-secondary/30 overflow-hidden reveal-on-scroll"
     >
       <!-- Double Inner Border Frame Layer 1 -->
       <div
@@ -834,14 +855,10 @@ onUnmounted(() => {
       <div class="relative z-10 px-6 py-8 sm:px-10 sm:py-11 text-center">
         <!-- Title: រូបភាពអនុស្សាវរីយ៍ (Gallery of Love) -->
         <div class="fade-in mb-5 text-center">
-          <h2
-            class="font-heading text-xl text-primary font-bold tracking-wide"
-          >
+          <h2 class="font-heading text-xl text-primary font-bold tracking-wide">
             រូបភាពអនុស្សាវរីយ៍
           </h2>
-          <p
-            class="font-script text-lg text-secondary-dark italic mt-0.5"
-          >
+          <p class="font-script text-lg text-secondary-dark italic mt-0.5">
             Gallery of Love
           </p>
           <div class="flex items-center justify-center gap-2 mt-2 opacity-60">
@@ -948,7 +965,7 @@ onUnmounted(() => {
 
     <!-- ─── Location & Map Card ─── -->
     <div
-      class="relative z-10 w-full max-w-[430px] mx-auto bg-[#FFFDF8]/95 backdrop-blur-md rounded-[28px] sm:rounded-[36px] shadow-[0_12px_60px_rgba(197,160,70,0.12),0_4px_25px_rgba(0,0,0,0.04)] border-2 border-secondary/30 overflow-hidden fade-in-up"
+      class="relative z-10 w-full max-w-[430px] mx-auto bg-[#FFFDF8]/95 backdrop-blur-md rounded-[28px] sm:rounded-[36px] shadow-[0_12px_60px_rgba(197,160,70,0.12),0_4px_25px_rgba(0,0,0,0.04)] border-2 border-secondary/30 overflow-hidden reveal-on-scroll"
     >
       <!-- Double Inner Border Frame Layer 1 -->
       <div
@@ -1060,11 +1077,11 @@ onUnmounted(() => {
 
     <!-- Developer Footer Credit -->
     <div class="relative z-10 mt-2 mb-6 text-center select-none">
-      <p
-        class="font-body text-[10px] sm:text-xs text-primary/60 tracking-wider"
-      >
+      <p class="font-body text-xs text-primary/60 tracking-wider">
         រៀបចំ និងរចនាដោយ
-        <span class="font-semibold text-secondary-dark">វន សីហា</span>
+        <span class="font-semibold text-secondary-dark"
+          >VORN Seyha (Lead Software Engineer)</span
+        >
       </p>
     </div>
 
