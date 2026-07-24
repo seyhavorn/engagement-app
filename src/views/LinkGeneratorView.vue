@@ -27,19 +27,19 @@ const generatedUrl = computed(() => {
   return url;
 });
 
-const fullTextToCopy = computed(() => {
-  const name = guestNameInput.value.trim() || 'ភ្ញៀវកិត្តិយស';
-  return `${generatedUrl.value}\nសូមគោរពអញ្ជើញ ${name} ចូលរួមក្នុងពិធីភ្ជាប់ពាក្យ (វន សីហា & សួង ដាវីត):`;
+// Clean unescaped URL for clean copy & display
+const cleanUrl = computed(() => {
+  return decodeURIComponent(generatedUrl.value);
 });
 
-const copyToClipboard = () => {
-  navigator.clipboard.writeText(fullTextToCopy.value);
+const copyLink = () => {
+  navigator.clipboard.writeText(cleanUrl.value);
   copied.value = true;
   setTimeout(() => (copied.value = false), 2500);
 };
 
 const openPreview = () => {
-  window.open(generatedUrl.value, '_blank');
+  window.open(cleanUrl.value, '_blank');
 };
 </script>
 
@@ -129,7 +129,7 @@ const openPreview = () => {
             v-model="guestNameInput"
             type="text"
             placeholder="ឧទាហរណ៍៖ សុជាតិ និង ភរិយា"
-            class="w-full px-4 py-3 rounded-xl bg-white border border-secondary/40 text-primary text-sm focus:outline-none focus:border-secondary shadow-xs transition-all placeholder:text-primary/30"
+            class="w-full px-4 py-3 rounded-xl bg-white border border-secondary/40 text-primary text-sm focus:outline-none focus:border-secondary shadow-xs transition-all placeholder:text-primary/30 select-text"
           />
         </div>
 
@@ -150,32 +150,32 @@ const openPreview = () => {
           </div>
         </div>
 
-        <!-- Result Preview Box -->
+        <!-- Single Clean Link Preview Box -->
         <div class="mb-6 text-left">
           <label class="block text-xs font-semibold text-secondary-dark mb-1.5">
-            លទ្ធផលតំណភ្ជាប់ & សារ (Generated Link & Message)
+            តំណភ្ជាប់ផ្ទាល់សម្រាប់ចម្លង (Clean Guest Link)
           </label>
           <div
-            class="p-3.5 rounded-xl bg-white/90 border border-secondary/30 text-xs font-mono text-secondary-dark leading-relaxed whitespace-pre-wrap break-all select-text shadow-xs"
+            class="p-3.5 rounded-xl bg-white/90 border border-secondary/30 text-xs font-mono text-secondary-dark break-all select-text shadow-xs"
           >
-            {{ fullTextToCopy }}
+            {{ cleanUrl }}
           </div>
         </div>
 
         <!-- Action Buttons -->
         <div class="flex flex-col gap-3">
-          <!-- Copy Button -->
+          <!-- Copy Link Button Only -->
           <button
-            @click="copyToClipboard"
+            @click="copyLink"
             class="w-full py-3.5 px-6 rounded-full bg-gradient-to-r from-secondary-dark via-secondary to-secondary-dark text-white font-body text-xs font-bold tracking-wide uppercase shadow-md shadow-secondary/25 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
           >
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
               <path
-                d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+                d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"
               />
             </svg>
             <span>{{
-              copied ? 'បានចម្លងតំណភ្ជាប់ & សាររួចរាល់!' : 'ចម្លងតំណភ្ជាប់ & សារ'
+              copied ? 'បានចម្លងតំណភ្ជាប់!' : 'ចម្លងតំណភ្ជាប់ (Copy Link)'
             }}</span>
           </button>
 

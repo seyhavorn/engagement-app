@@ -36,7 +36,7 @@ const scheduleItems = [
 </script>
 
 <template>
-  <div class="w-full my-6 px-2 sm:px-4">
+  <div class="w-full my-6 px-2">
     <div class="text-center mb-6">
       <span
         class="inline-block px-3.5 py-1 rounded-full bg-secondary/15 border border-secondary/30 text-secondary-dark font-body text-xs font-semibold tracking-widest"
@@ -52,26 +52,25 @@ const scheduleItems = [
     </div>
 
     <div class="relative max-w-lg mx-auto">
-      <!-- Vertical Connecting Line in V1 Secondary Gold -->
+      <!-- Vertical Connecting Line in Mobile Left Layout -->
       <div
-        class="absolute left-6 sm:left-1/2 top-4 bottom-4 w-0.5 bg-gradient-to-b from-secondary/30 via-secondary/70 to-secondary/30 -translate-x-1/2"
+        class="absolute left-5 top-4 bottom-4 w-0.5 bg-gradient-to-b from-secondary/30 via-secondary/70 to-secondary/30 -translate-x-1/2"
       />
 
-      <div class="space-y-5">
+      <div class="space-y-4">
         <div
           v-for="(item, idx) in scheduleItems"
           :key="idx"
-          class="relative flex flex-col sm:flex-row items-start group"
-          :class="idx % 2 === 0 ? 'sm:flex-row-reverse' : ''"
+          class="relative flex flex-col items-start group"
         >
-          <!-- Center SVG Vector Icon Pin -->
+          <!-- Mobile Left SVG Vector Icon Pin -->
           <div
-            class="absolute left-6 sm:left-1/2 -translate-x-1/2 top-3 z-10 w-10 h-10 rounded-full bg-gradient-to-tr from-secondary-dark via-secondary to-amber-300 border-2 border-[#FFFDF8] flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform duration-300"
+            class="absolute left-5 -translate-x-1/2 top-3 z-10 w-9 h-9 rounded-full bg-gradient-to-tr from-secondary-dark via-secondary to-amber-300 border-2 border-[#FFFDF8] flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform duration-300"
           >
             <!-- Welcome SVG -->
             <svg
               v-if="item.type === 'welcome'"
-              class="w-5 h-5"
+              class="w-4 h-4"
               viewBox="0 0 24 24"
               fill="currentColor"
             >
@@ -82,7 +81,7 @@ const scheduleItems = [
             <!-- Ring SVG -->
             <svg
               v-else-if="item.type === 'ring'"
-              class="w-5 h-5"
+              class="w-4 h-4"
               viewBox="0 0 24 24"
               fill="currentColor"
             >
@@ -93,7 +92,7 @@ const scheduleItems = [
             <!-- Tea Blessing SVG -->
             <svg
               v-else-if="item.type === 'tea'"
-              class="w-5 h-5"
+              class="w-4 h-4"
               viewBox="0 0 24 24"
               fill="currentColor"
             >
@@ -104,7 +103,7 @@ const scheduleItems = [
             <!-- Banquet SVG -->
             <svg
               v-else
-              class="w-5 h-5"
+              class="w-4 h-4"
               viewBox="0 0 24 24"
               fill="currentColor"
             >
@@ -114,9 +113,9 @@ const scheduleItems = [
             </svg>
           </div>
 
-          <!-- Content Card (V1 Ivory Cream + Gold Border) -->
+          <!-- Content Card (Fixed Mobile Layout Alignment) -->
           <div
-            class="ml-14 sm:ml-0 sm:w-[calc(50%-2.5rem)] p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#FFFDF8] via-[#FFF9EE] to-[#FFF6E5] border border-secondary/40 shadow-[0_4px_16px_rgba(197,160,70,0.15)] backdrop-blur-sm group-hover:border-secondary/70 transition-all duration-300 text-left"
+            class="ml-12 w-[calc(100%-3rem)] p-4 rounded-2xl bg-gradient-to-b from-[#FFFDF8] via-[#FFF9EE] to-[#FFF6E5] border border-secondary/40 shadow-[0_4px_16px_rgba(197,160,70,0.15)] backdrop-blur-sm group-hover:border-secondary/70 transition-all duration-300 text-left"
           >
             <div
               class="flex items-center gap-2 text-secondary-dark font-semibold text-xs font-body"
