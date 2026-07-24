@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import CountdownTimer from './CountdownTimer.vue';
 import RsvpModal from './RsvpModal.vue';
 import MusicPlayerV2 from '../v2/components/MusicPlayerV2.vue';
@@ -95,14 +95,14 @@ const onMouseLeave = () => {
 const onMouseUp = (e: MouseEvent) => {
   isDragging.value = false;
   const container = e.currentTarget as HTMLElement;
-
-  // Snap to nearest slide
   const width = container.clientWidth;
-  const snapIndex = Math.round(container.scrollLeft / width);
-  container.scrollTo({
-    left: snapIndex * width,
-    behavior: 'smooth',
-  });
+  if (width > 0) {
+    const snapIndex = Math.round(container.scrollLeft / width);
+    container.scrollTo({
+      left: snapIndex * width,
+      behavior: 'smooth',
+    });
+  }
 };
 
 const onMouseMove = (e: MouseEvent) => {
@@ -113,6 +113,33 @@ const onMouseMove = (e: MouseEvent) => {
   const walk = (x - startX.value) * 1.5;
   container.scrollLeft = scrollLeftVal.value - walk;
 };
+// ── Gallery Auto-Play Slideshow ──
+let galleryAutoplayInterval: number | undefined;
+
+const startGalleryAutoplay = () => {
+  stopGalleryAutoplay();
+  galleryAutoplayInterval = window.setInterval(() => {
+    if (!isDragging.value && carouselContainer.value) {
+      const nextIndex = (activeImageIndex.value + 1) % coupleImages.length;
+      scrollToImage(nextIndex);
+    }
+  }, 3500);
+};
+
+const stopGalleryAutoplay = () => {
+  if (galleryAutoplayInterval) {
+    clearInterval(galleryAutoplayInterval);
+    galleryAutoplayInterval = undefined;
+  }
+};
+
+onMounted(() => {
+  startGalleryAutoplay();
+});
+
+onUnmounted(() => {
+  stopGalleryAutoplay();
+});
 </script>
 
 <template>

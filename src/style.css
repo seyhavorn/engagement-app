@@ -23,6 +23,20 @@
 }
 
 /* ── Base Styles ──────────────────────────────────────── */
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+input, textarea {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -37,6 +51,8 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   touch-action: manipulation;
   -webkit-text-size-adjust: 100%;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 /* Prevent iOS Safari input focus auto-zoom */

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import CountdownTimerV2 from './components/CountdownTimerV2.vue';
 import EventScheduleV2 from './components/EventScheduleV2.vue';
 import RsvpModalV2 from './components/RsvpModalV2.vue';
@@ -65,6 +65,34 @@ const openLightbox = (index: number) => {
   selectedPhotoIndex.value = index;
   showLightbox.value = true;
 };
+
+// ── Gallery Auto-Play Slideshow ──
+let galleryAutoplayInterval: number | undefined;
+
+const startGalleryAutoplay = () => {
+  stopGalleryAutoplay();
+  galleryAutoplayInterval = window.setInterval(() => {
+    if (carouselContainer.value) {
+      const nextIndex = (activeImageIndex.value + 1) % coupleImages.length;
+      scrollToImage(nextIndex);
+    }
+  }, 3500);
+};
+
+const stopGalleryAutoplay = () => {
+  if (galleryAutoplayInterval) {
+    clearInterval(galleryAutoplayInterval);
+    galleryAutoplayInterval = undefined;
+  }
+};
+
+onMounted(() => {
+  startGalleryAutoplay();
+});
+
+onUnmounted(() => {
+  stopGalleryAutoplay();
+});
 
 import OpenEnvelopeModal from '../components/OpenEnvelopeModal.vue';
 

@@ -36,9 +36,10 @@ const tryPlay = () => {
     }
     if (typeof playerRef.value.playVideo === 'function') {
       playerRef.value.playVideo();
+      isPlaying.value = true;
     }
   } catch (e) {
-    // Audio blocked by browser policy
+    // Audio blocked until user interaction
   }
 };
 
@@ -82,10 +83,7 @@ const createPlayer = () => {
         enablejsapi: 1,
       },
       events: {
-        onReady: (event: any) => {
-          if (typeof event.target.seekTo === 'function') {
-            event.target.seekTo(startTimeSeconds, true);
-          }
+        onReady: () => {
           if (userHasInteracted.value) {
             tryPlay();
           }
