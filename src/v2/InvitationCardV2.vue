@@ -145,7 +145,7 @@ const copyAddress = () => {
 
     <!-- ─── DESIGN V2 MAIN CARD ─── -->
     <div
-      class="relative z-10 w-full max-w-[480px] mx-auto bg-gradient-to-b from-[#12241C]/95 via-[#0D1C15]/95 to-[#08140E]/95 backdrop-blur-xl rounded-[28px] sm:rounded-[36px] shadow-[0_20px_80px_rgba(0,0,0,0.8),0_0_40px_rgba(245,158,11,0.15)] border-2 border-amber-500/40 overflow-hidden"
+      class="relative z-10 w-full max-w-[430px] mx-auto bg-gradient-to-b from-[#12241C]/95 via-[#0D1C15]/95 to-[#08140E]/95 backdrop-blur-xl rounded-[28px] sm:rounded-[36px] shadow-[0_20px_80px_rgba(0,0,0,0.8),0_0_40px_rgba(245,158,11,0.15)] border-2 border-amber-500/40 overflow-hidden"
     >
       <!-- Gold Foil Ornaments (Top Left) -->
       <div
@@ -392,7 +392,7 @@ const copyAddress = () => {
 
     <!-- ─── DESIGN V2 GALLERY CARD ─── -->
     <div
-      class="relative z-10 w-full max-w-[480px] mx-auto bg-gradient-to-b from-[#12241C]/95 via-[#0D1C15]/95 to-[#08140E]/95 backdrop-blur-xl rounded-[28px] sm:rounded-[36px] shadow-[0_20px_80px_rgba(0,0,0,0.8),0_0_40px_rgba(245,158,11,0.15)] border-2 border-amber-500/40 overflow-hidden"
+      class="relative z-10 w-full max-w-[430px] mx-auto bg-gradient-to-b from-[#12241C]/95 via-[#0D1C15]/95 to-[#08140E]/95 backdrop-blur-xl rounded-[28px] sm:rounded-[36px] shadow-[0_20px_80px_rgba(0,0,0,0.8),0_0_40px_rgba(245,158,11,0.15)] border-2 border-amber-500/40 overflow-hidden"
     >
       <div class="relative z-10 px-6 py-8 sm:px-10 sm:py-11 text-center">
         <!-- Section Header -->
@@ -493,14 +493,14 @@ const copyAddress = () => {
 
     <!-- ─── DESIGN V2 PROGRAM SCHEDULE CARD ─── -->
     <div
-      class="relative z-10 w-full max-w-[480px] mx-auto bg-gradient-to-b from-[#12241C]/95 via-[#0D1C15]/95 to-[#08140E]/95 backdrop-blur-xl rounded-[28px] sm:rounded-[36px] shadow-[0_20px_80px_rgba(0,0,0,0.8),0_0_40px_rgba(245,158,11,0.15)] border-2 border-amber-500/40 overflow-hidden"
+      class="relative z-10 w-full max-w-[430px] mx-auto bg-gradient-to-b from-[#12241C]/95 via-[#0D1C15]/95 to-[#08140E]/95 backdrop-blur-xl rounded-[28px] sm:rounded-[36px] shadow-[0_20px_80px_rgba(0,0,0,0.8),0_0_40px_rgba(245,158,11,0.15)] border-2 border-amber-500/40 overflow-hidden"
     >
       <EventScheduleV2 />
     </div>
 
     <!-- ─── DESIGN V2 LOCATION MAP CARD ─── -->
     <div
-      class="relative z-10 w-full max-w-[480px] mx-auto bg-gradient-to-b from-[#12241C]/95 via-[#0D1C15]/95 to-[#08140E]/95 backdrop-blur-xl rounded-[28px] sm:rounded-[36px] shadow-[0_20px_80px_rgba(0,0,0,0.8),0_0_40px_rgba(245,158,11,0.15)] border-2 border-amber-500/40 overflow-hidden"
+      class="relative z-10 w-full max-w-[430px] mx-auto bg-gradient-to-b from-[#12241C]/95 via-[#0D1C15]/95 to-[#08140E]/95 backdrop-blur-xl rounded-[28px] sm:rounded-[36px] shadow-[0_20px_80px_rgba(0,0,0,0.8),0_0_40px_rgba(245,158,11,0.15)] border-2 border-amber-500/40 overflow-hidden"
     >
       <div class="relative z-10 px-6 py-8 sm:px-10 sm:py-11 text-center">
         <!-- Title -->
@@ -604,6 +604,7 @@ const copyAddress = () => {
       :visible="showLightbox"
       :images="coupleImages"
       :initial-index="selectedPhotoIndex"
+      theme="v2"
       @close="showLightbox = false"
     />
 

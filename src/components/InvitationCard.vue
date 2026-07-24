@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import CountdownTimer from './CountdownTimer.vue';
+import EventSchedule from './EventSchedule.vue';
 import RsvpModal from './RsvpModal.vue';
 import MusicPlayerV2 from '../v2/components/MusicPlayerV2.vue';
 import PhotoLightboxModalV2 from '../v2/components/PhotoLightboxModalV2.vue';
@@ -161,7 +162,7 @@ onUnmounted(() => {
 
     <!-- ─── Invitation Card ─── -->
     <div
-      class="relative z-10 w-full max-w-[480px] mx-auto my-auto bg-[#FFFDF8]/95 backdrop-blur-md rounded-[28px] sm:rounded-[36px] shadow-[0_12px_60px_rgba(197,160,70,0.12),0_4px_25px_rgba(0,0,0,0.04)] border-2 border-secondary/30 overflow-hidden fade-in-up"
+      class="relative z-10 w-full max-w-[430px] mx-auto my-auto bg-[#FFFDF8]/95 backdrop-blur-md rounded-[28px] sm:rounded-[36px] shadow-[0_12px_60px_rgba(197,160,70,0.12),0_4px_25px_rgba(0,0,0,0.04)] border-2 border-secondary/30 overflow-hidden fade-in-up"
     >
       <!-- Top Right Golden Floral Corner Ornament -->
       <svg
@@ -694,30 +695,8 @@ onUnmounted(() => {
           <CountdownTimer :target-date="countdownTarget" />
         </div>
 
-        <!-- Solid Secondary Gold Gradient RSVP Pill Button -->
-        <!-- <div class="fade-in fade-in-delay-7 my-5">
-          <button
-            @click="showRsvp = true"
-            class="group relative inline-flex items-center justify-center gap-2.5 px-9 sm:px-11 py-3.5 rounded-full bg-gradient-to-r from-secondary-dark via-secondary to-secondary-dark text-white font-body text-xs sm:text-sm font-medium tracking-wide shadow-lg shadow-secondary/25 hover:shadow-xl hover:shadow-secondary/35 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
-          >
-            <svg
-              class="w-4 h-4 group-hover:scale-110 transition-transform duration-300"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-              />
-              <polyline points="22,6 12,13 2,6" />
-            </svg>
-            ឆ្លើយតបឥឡូវ
-          </button>
-        </div> -->
-
         <!-- Footer Note -->
-        <div class="fade-in fade-in-delay-8 mt-4 flex flex-col items-center">
+        <div class="fade-in fade-in-delay-7 mt-4 flex flex-col items-center">
           <div
             class="w-1.5 h-1.5 rounded-full bg-secondary mb-1.5 opacity-80"
           />
@@ -730,9 +709,65 @@ onUnmounted(() => {
       </div>
     </div>
 
+    <!-- ─── Event Schedule Timeline Card (Standalone) ─── -->
+    <div
+      class="relative z-10 w-full max-w-[430px] mx-auto bg-[#FFFDF8]/95 backdrop-blur-md rounded-[28px] sm:rounded-[36px] shadow-[0_12px_60px_rgba(197,160,70,0.12),0_4px_25px_rgba(0,0,0,0.04)] border-2 border-secondary/30 overflow-hidden fade-in-up"
+    >
+      <!-- Double Inner Border Frame Layer 1 -->
+      <div
+        class="absolute inset-[8px] rounded-[24px] sm:rounded-[32px] border-2 border-secondary/30 pointer-events-none z-10"
+      />
+      <!-- Double Inner Border Frame Layer 2 -->
+      <div
+        class="absolute inset-[14px] rounded-[18px] sm:rounded-[26px] border border-secondary/20 pointer-events-none z-10"
+      />
+
+      <!-- Four Frame Corner Ornaments (Top-Left) -->
+      <svg
+        class="absolute top-3 left-3 w-6 h-6 text-secondary pointer-events-none z-20 opacity-80"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path d="M2 2h8v2H4v6H2V2zm4 4h4v2H6v2H4V6h2z" />
+        <circle cx="3" cy="3" r="1.5" />
+      </svg>
+      <!-- Four Frame Corner Ornaments (Top-Right) -->
+      <svg
+        class="absolute top-3 right-3 w-6 h-6 text-secondary pointer-events-none z-20 opacity-80"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path d="M22 2h-8v2h6v6h2V2zm-4 4h-4v2h4v2h2V6h-2z" />
+        <circle cx="21" cy="3" r="1.5" />
+      </svg>
+      <!-- Four Frame Corner Ornaments (Bottom-Left) -->
+      <svg
+        class="absolute bottom-3 left-3 w-6 h-6 text-secondary pointer-events-none z-20 opacity-80"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path d="M2 22h8v-2H4v-6H2v8zm4-4h4v-2H6v-2H4v4h2z" />
+        <circle cx="3" cy="21" r="1.5" />
+      </svg>
+      <!-- Four Frame Corner Ornaments (Bottom-Right) -->
+      <svg
+        class="absolute bottom-3 right-3 w-6 h-6 text-secondary pointer-events-none z-20 opacity-80"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path d="M22 22h-8v-2h6v-6h2v8zm-4-4h-4v-2h4v-2h2v4h-2z" />
+        <circle cx="21" cy="21" r="1.5" />
+      </svg>
+
+      <!-- Card Main Content Container -->
+      <div class="relative z-10 px-4 py-8 sm:px-8 sm:py-10 text-center">
+        <EventSchedule />
+      </div>
+    </div>
+
     <!-- ─── Gallery Card ─── -->
     <div
-      class="relative z-10 w-full max-w-[480px] mx-auto bg-[#FFFDF8]/95 backdrop-blur-md rounded-[28px] sm:rounded-[36px] shadow-[0_12px_60px_rgba(197,160,70,0.12),0_4px_25px_rgba(0,0,0,0.04)] border-2 border-secondary/30 overflow-hidden fade-in-up"
+      class="relative z-10 w-full max-w-[430px] mx-auto bg-[#FFFDF8]/95 backdrop-blur-md rounded-[28px] sm:rounded-[36px] shadow-[0_12px_60px_rgba(197,160,70,0.12),0_4px_25px_rgba(0,0,0,0.04)] border-2 border-secondary/30 overflow-hidden fade-in-up"
     >
       <!-- Double Inner Border Frame Layer 1 -->
       <div
@@ -801,9 +836,9 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <!-- Swipeable Featured Couple Images Carousel -->
+        <!-- Swipeable Featured Couple Images Carousel (V1 Ivory Theme) -->
         <div
-          class="relative w-full aspect-[3/4] rounded-2xl border-2 border-secondary/40 overflow-hidden shadow-lg mb-4 bg-[#1E1816] group cursor-pointer"
+          class="relative w-full aspect-[3/4] rounded-2xl border-2 border-secondary/40 overflow-hidden shadow-lg mb-4 bg-gradient-to-b from-[#FFFDF8] via-[#FFF9EE] to-[#FFF6E5] group cursor-pointer"
         >
           <!-- Horizontally Scrollable Container for Large Images -->
           <div
@@ -834,12 +869,12 @@ onUnmounted(() => {
               />
               <!-- Image overlay shade -->
               <div
-                class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none"
+                class="absolute inset-0 bg-gradient-to-t from-secondary-dark/20 via-transparent to-transparent pointer-events-none"
               />
 
-              <!-- Tap/Click to Expand Zoom Icon Overlay -->
+              <!-- Tap/Click to Expand Zoom Icon Overlay (V1 Colors) -->
               <div
-                class="absolute bottom-4 right-4 p-2 rounded-full bg-black/60 border border-secondary/50 text-secondary opacity-0 group-hover:opacity-100 transition-opacity"
+                class="absolute bottom-4 right-4 p-2.5 rounded-full bg-[#FFFDF8]/95 border-2 border-secondary/60 text-secondary-dark shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 <svg
                   class="w-4 h-4"
@@ -898,7 +933,7 @@ onUnmounted(() => {
 
     <!-- ─── Location & Map Card ─── -->
     <div
-      class="relative z-10 w-full max-w-[480px] mx-auto bg-[#FFFDF8]/95 backdrop-blur-md rounded-[28px] sm:rounded-[36px] shadow-[0_12px_60px_rgba(197,160,70,0.12),0_4px_25px_rgba(0,0,0,0.04)] border-2 border-secondary/30 overflow-hidden fade-in-up"
+      class="relative z-10 w-full max-w-[430px] mx-auto bg-[#FFFDF8]/95 backdrop-blur-md rounded-[28px] sm:rounded-[36px] shadow-[0_12px_60px_rgba(197,160,70,0.12),0_4px_25px_rgba(0,0,0,0.04)] border-2 border-secondary/30 overflow-hidden fade-in-up"
     >
       <!-- Double Inner Border Frame Layer 1 -->
       <div
