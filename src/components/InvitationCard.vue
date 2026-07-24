@@ -63,12 +63,16 @@ const googleMapsUrl = 'https://maps.app.goo.gl/pZACuQjEsbPy44hv5';
 // ── Gallery State ──
 const activeImageIndex = ref(0);
 const coupleImages = [
-  `/images/seyha_david_1.jpg`,
-  `/images/seyha_david_2.JPG`,
-  `/images/seyha_david_3.jpg`,
-  `/images/seyha_david_4.JPG`,
-  `/images/seyha_david_5.jpg`,
-  `/images/seyha_david_6.jpg`,
+  `/images/couple_1.JPG`,
+  `/images/couple_2.JPG`,
+  `/images/couple_3.JPG`,
+  `/images/couple_4.JPG`,
+  `/images/couple_5.JPG`,
+  `/images/couple_6.JPG`,
+  `/images/couple_7.JPG`,
+  `/images/couple_8.JPG`,
+  `/images/couple_9.JPG`,
+  `/images/couple_10.JPG`,
 ];
 
 const carouselContainer = ref<HTMLElement | null>(null);
@@ -896,7 +900,7 @@ onUnmounted(() => {
               <img
                 :src="img"
                 alt="Seyha & David"
-                class="w-full h-full object-contain sm:object-cover select-none transition-transform duration-500 group-hover:scale-105"
+                class="w-full h-full object-contain select-none transition-transform duration-500 group-hover:scale-105"
                 draggable="false"
               />
               <!-- Image overlay shade -->
@@ -940,8 +944,8 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <!-- Single Row Grid of All Couple Images as Thumbnails -->
-        <div class="grid grid-cols-6 gap-2 w-full mt-4 select-none">
+        <!-- Grid of All 10 Couple Images as Thumbnails -->
+        <div class="grid grid-cols-5 gap-1.5 w-full mt-4 select-none">
           <button
             v-for="(img, idx) in coupleImages"
             :key="idx"
