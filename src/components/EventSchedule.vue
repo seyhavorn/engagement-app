@@ -43,7 +43,7 @@ const scheduleItems = [
       >
         កាលវិភាគពិធី
       </span>
-      <h3 class="font-heading text-xl sm:text-2xl text-primary mt-2 font-bold">
+      <h3 class="font-heading text-xl text-primary mt-2 font-bold">
         កម្មវិធីប្រារព្ធពិធី
       </h3>
       <div
@@ -119,12 +119,12 @@ const scheduleItems = [
             class="ml-14 sm:ml-0 sm:w-[calc(50%-2.5rem)] p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#FFFDF8] via-[#FFF9EE] to-[#FFF6E5] border border-secondary/40 shadow-[0_4px_16px_rgba(197,160,70,0.15)] backdrop-blur-sm group-hover:border-secondary/70 transition-all duration-300 text-left"
           >
             <div
-              class="flex items-center gap-2 text-secondary-dark font-semibold text-xs sm:text-sm font-body"
+              class="flex items-center gap-2 text-secondary-dark font-semibold text-xs font-body"
             >
               <span>{{ item.time }}</span>
             </div>
             <h4
-              class="font-heading text-base sm:text-lg text-primary mt-1 font-bold leading-relaxed"
+              class="font-heading text-base text-primary mt-1 font-bold leading-relaxed"
             >
               {{ item.title }}
             </h4>

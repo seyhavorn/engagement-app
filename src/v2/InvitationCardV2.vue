@@ -231,7 +231,7 @@ const copyAddress = () => {
 
         <!-- Main Title -->
         <h1
-          class="font-heading text-2xl sm:text-3xl text-amber-200 font-bold tracking-wide leading-relaxed py-1 block drop-shadow-md"
+          class="font-heading text-2xl text-amber-200 font-bold tracking-wide leading-relaxed py-1 block drop-shadow-md"
         >
           ពិធីភ្ជាប់ពាក្យ
         </h1>
@@ -257,7 +257,7 @@ const copyAddress = () => {
             សូមគោរពអញ្ជើញ
           </p>
           <div
-            class="font-heading text-xl sm:text-2xl text-amber-200 font-bold mt-1 tracking-wide"
+            class="font-heading text-xl text-amber-200 font-bold mt-1 tracking-wide"
           >
             {{ guestName }}
           </div>
@@ -282,7 +282,7 @@ const copyAddress = () => {
               កូនប្រុស
             </span>
             <span
-              class="font-heading text-2xl sm:text-3xl text-amber-100 font-semibold tracking-wide"
+              class="font-heading text-2xl text-amber-100 font-semibold tracking-wide"
             >
               {{ groomName }}
             </span>
@@ -290,7 +290,7 @@ const copyAddress = () => {
 
           <!-- Ampersand -->
           <div
-            class="font-script text-4xl sm:text-5xl text-amber-400 italic my-1 opacity-90 drop-shadow-[0_2px_10px_rgba(245,158,11,0.4)]"
+            class="font-script text-4xl text-amber-400 italic my-1 opacity-90 drop-shadow-[0_2px_10px_rgba(245,158,11,0.4)]"
           >
             &amp;
           </div>
@@ -312,7 +312,7 @@ const copyAddress = () => {
               កូនស្រី
             </span>
             <span
-              class="font-heading text-2xl sm:text-3xl text-amber-100 font-semibold tracking-wide"
+              class="font-heading text-2xl text-amber-100 font-semibold tracking-wide"
             >
               {{ brideName }}
             </span>
@@ -321,7 +321,7 @@ const copyAddress = () => {
 
         <!-- Message -->
         <p
-          class="font-body text-xs sm:text-sm text-emerald-100/80 leading-relaxed max-w-sm mx-auto my-5"
+          class="font-body text-xs text-emerald-100/80 leading-relaxed max-w-sm mx-auto my-5"
         >
           {{ invitationMessage }}
         </p>
@@ -365,14 +365,14 @@ const copyAddress = () => {
 
           <!-- Prominent Date Text -->
           <h3
-            class="font-heading text-lg sm:text-xl font-bold text-amber-200 tracking-wide leading-relaxed py-1 block drop-shadow-md"
+            class="font-heading text-lg font-bold text-amber-200 tracking-wide leading-relaxed py-1 block drop-shadow-md"
           >
             {{ eventDate }}
           </h3>
 
           <!-- Time Pill -->
           <div
-            class="inline-flex items-center justify-center gap-1.5 mt-3 px-4 py-1.5 rounded-full bg-emerald-950/80 border border-amber-500/40 text-amber-200 font-body text-xs sm:text-sm font-semibold"
+            class="inline-flex items-center justify-center gap-1.5 mt-3 px-4 py-1.5 rounded-full bg-emerald-950/80 border border-amber-500/40 text-amber-200 font-body text-xs font-semibold"
           >
             <svg
               class="w-3.5 h-3.5 text-amber-400"
@@ -413,7 +413,7 @@ const copyAddress = () => {
         <!-- Section Header -->
         <div class="mb-5">
           <h2
-            class="font-heading text-xl sm:text-2xl text-amber-200 font-semibold"
+            class="font-heading text-xl text-amber-200 font-semibold"
           >
             រូបភាពអនុស្សាវរីយ៍
           </h2>
@@ -521,7 +521,7 @@ const copyAddress = () => {
         <!-- Title -->
         <div class="mb-5">
           <h2
-            class="font-heading text-xl sm:text-2xl text-amber-200 font-semibold"
+            class="font-heading text-xl text-amber-200 font-semibold"
           >
             ទីតាំងកម្មវិធី
           </h2>
@@ -532,7 +532,7 @@ const copyAddress = () => {
 
         <!-- Venue details -->
         <div class="mb-5 space-y-1">
-          <p class="font-heading text-base sm:text-lg text-amber-300 font-bold">
+          <p class="font-heading text-base text-amber-300 font-bold">
             {{ venueName }}
           </p>
           <p class="font-body text-xs text-emerald-100/80 max-w-xs mx-auto">
@@ -560,7 +560,7 @@ const copyAddress = () => {
             :href="googleMapsUrl"
             target="_blank"
             rel="noopener noreferrer"
-            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-emerald-950 font-body text-xs sm:text-sm font-bold tracking-wide shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-emerald-950 font-body text-xs font-bold tracking-wide shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
           >
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
               <path
@@ -572,7 +572,7 @@ const copyAddress = () => {
 
           <button
             @click="copyAddress"
-            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-emerald-950/80 border border-amber-500/40 text-amber-200 font-body text-xs sm:text-sm font-semibold hover:border-amber-400 transition-all duration-300"
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-emerald-950/80 border border-amber-500/40 text-amber-200 font-body text-xs font-semibold hover:border-amber-400 transition-all duration-300"
           >
             <svg
               v-if="copied"

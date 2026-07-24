@@ -444,7 +444,7 @@ onUnmounted(() => {
         <!-- Main Title -->
         <div class="fade-in mt-1 mb-3">
           <h2
-            class="font-heading text-2xl sm:text-3xl text-primary font-bold tracking-wide"
+            class="font-heading text-2xl text-primary font-bold tracking-wide"
           >
             ពិធីភ្ជាប់ពាក្យ
           </h2>
@@ -489,7 +489,7 @@ onUnmounted(() => {
             សូមគោរពអញ្ជើញ
           </p>
           <p
-            class="relative z-10 font-heading text-xl sm:text-2xl text-secondary-dark font-bold mt-0.5 tracking-wide"
+            class="relative z-10 font-heading text-xl text-secondary-dark font-bold mt-0.5 tracking-wide"
           >
             {{ guestName }}
           </p>
@@ -519,7 +519,7 @@ onUnmounted(() => {
               </span>
             </div>
             <h1
-              class="font-heading text-2xl sm:text-3xl text-primary font-semibold leading-relaxed py-0.5 tracking-wide"
+              class="font-heading text-2xl text-primary font-semibold leading-relaxed py-0.5 tracking-wide"
             >
               {{ groomName }}
             </h1>
@@ -528,7 +528,7 @@ onUnmounted(() => {
           <!-- Center: Gold Calligraphy Ampersand -->
           <div class="flex items-center justify-center shrink-0">
             <span
-              class="font-script text-4xl sm:text-5xl text-secondary-dark italic leading-none drop-shadow-xs"
+              class="font-script text-4xl text-secondary-dark italic leading-none drop-shadow-xs"
             >
               &amp;
             </span>
@@ -554,7 +554,7 @@ onUnmounted(() => {
               </span>
             </div>
             <h1
-              class="font-heading text-2xl sm:text-3xl text-primary font-semibold leading-relaxed py-0.5 tracking-wide"
+              class="font-heading text-2xl text-primary font-semibold leading-relaxed py-0.5 tracking-wide"
             >
               {{ brideName }}
             </h1>
@@ -620,14 +620,14 @@ onUnmounted(() => {
 
           <!-- Prominent Date Text -->
           <h3
-            class="font-heading text-lg sm:text-xl font-bold tracking-wide text-secondary-dark leading-relaxed py-1 block"
+            class="font-heading text-lg font-bold tracking-wide text-secondary-dark leading-relaxed py-1 block"
           >
             {{ eventDate }}
           </h3>
 
           <!-- Time Pill -->
           <div
-            class="inline-flex items-center justify-center gap-1.5 mt-3 px-4 py-1.5 rounded-full bg-secondary/10 border border-secondary/30 text-secondary-dark font-body text-xs sm:text-sm font-semibold"
+            class="inline-flex items-center justify-center gap-1.5 mt-3 px-4 py-1.5 rounded-full bg-secondary/10 border border-secondary/30 text-secondary-dark font-body text-xs font-semibold"
           >
             <svg
               class="w-3.5 h-3.5 text-secondary-dark"
@@ -652,7 +652,7 @@ onUnmounted(() => {
             </svg>
           </div>
           <p
-            class="font-accent text-xs sm:text-sm tracking-wide text-primary font-bold"
+            class="font-accent text-xs tracking-wide text-primary font-bold"
           >
             {{ venueName }}
           </p>
@@ -667,7 +667,7 @@ onUnmounted(() => {
             :href="googleMapsUrl"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-1.5 mt-2.5 px-4 py-1.5 rounded-full border border-secondary/40 bg-secondary/10 hover:bg-secondary/20 text-secondary-dark text-[10px] sm:text-xs font-body font-medium tracking-wider transition-all duration-200 group shadow-xs"
+            class="inline-flex items-center gap-1.5 mt-2.5 px-4 py-1.5 rounded-full border border-secondary/40 bg-secondary/10 hover:bg-secondary/20 text-secondary-dark text-xs font-body font-medium tracking-wider transition-all duration-200 group shadow-xs"
           >
             <svg
               class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"
@@ -694,7 +694,7 @@ onUnmounted(() => {
           </div>
 
           <p
-            class="font-body text-xs sm:text-sm text-primary leading-relaxed max-w-xs mx-auto"
+            class="font-body text-xs text-primary leading-relaxed max-w-xs mx-auto"
           >
             "{{ invitationMessage }}"
           </p>
@@ -703,7 +703,7 @@ onUnmounted(() => {
         <!-- Countdown Timer -->
         <div class="fade-in fade-in-delay-6 mt-5 mb-6">
           <p
-            class="font-body text-[10px] sm:text-xs tracking-[0.15em] uppercase text-primary-muted mb-3"
+            class="font-body text-xs tracking-[0.15em] uppercase text-primary-muted mb-3"
           >
             រាប់ថយក្រោយទៅកាន់ថ្ងៃពិសេសរបស់យើង
           </p>
@@ -716,7 +716,7 @@ onUnmounted(() => {
             class="w-1.5 h-1.5 rounded-full bg-secondary mb-1.5 opacity-80"
           />
           <p
-            class="font-body text-xs sm:text-sm text-secondary-dark opacity-95 tracking-wide font-medium"
+            class="font-body text-xs text-secondary-dark opacity-95 tracking-wide font-medium"
           >
             យើងខ្ញុំរង់ចាំទទួលស្វាគមន៍លោកអ្នកដោយក្តីរីករាយ!
           </p>
@@ -835,12 +835,12 @@ onUnmounted(() => {
         <!-- Title: រូបភាពអនុស្សាវរីយ៍ (Gallery of Love) -->
         <div class="fade-in mb-5 text-center">
           <h2
-            class="font-heading text-xl sm:text-2xl text-primary font-bold tracking-wide"
+            class="font-heading text-xl text-primary font-bold tracking-wide"
           >
             រូបភាពអនុស្សាវរីយ៍
           </h2>
           <p
-            class="font-script text-lg sm:text-xl text-secondary-dark italic mt-0.5"
+            class="font-script text-lg text-secondary-dark italic mt-0.5"
           >
             Gallery of Love
           </p>
@@ -1001,12 +1001,12 @@ onUnmounted(() => {
         <!-- Title: ទីតាំងកម្មវិធី -->
         <div class="fade-in mb-5">
           <h2
-            class="font-heading text-lg sm:text-xl tracking-wide text-primary font-normal"
+            class="font-heading text-lg tracking-wide text-primary font-normal"
           >
             ទីតាំងកម្មវិធី
           </h2>
           <p
-            class="font-body text-[10px] sm:text-xs text-secondary font-medium tracking-widest uppercase mt-0.5"
+            class="font-body text-xs text-secondary font-medium tracking-widest uppercase mt-0.5"
           >
             Event Location
           </p>
@@ -1019,7 +1019,7 @@ onUnmounted(() => {
 
         <!-- Venue details -->
         <div class="mb-5">
-          <p class="font-accent text-sm sm:text-base text-primary font-bold">
+          <p class="font-accent text-sm text-primary font-bold">
             {{ venueName }}
           </p>
           <p class="font-body text-xs text-primary-muted mt-1 max-w-xs mx-auto">
@@ -1045,7 +1045,7 @@ onUnmounted(() => {
             :href="googleMapsUrl"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-secondary-dark via-secondary to-secondary-dark text-white font-body text-xs sm:text-sm font-medium tracking-wide shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+            class="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-secondary-dark via-secondary to-secondary-dark text-white font-body text-xs font-medium tracking-wide shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
           >
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
               <path
