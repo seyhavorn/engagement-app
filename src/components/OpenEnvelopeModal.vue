@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 withDefaults(
   defineProps<{
@@ -17,8 +17,31 @@ const emit = defineEmits<{
 
 const isOpen = ref(false);
 
+const lockScroll = () => {
+  document.body.style.overflow = 'hidden';
+  document.documentElement.style.overflow = 'hidden';
+  document.body.style.touchAction = 'none';
+};
+
+const unlockScroll = () => {
+  document.body.style.overflow = '';
+  document.documentElement.style.overflow = '';
+  document.body.style.touchAction = '';
+};
+
+onMounted(() => {
+  if (!isOpen.value) {
+    lockScroll();
+  }
+});
+
+onUnmounted(() => {
+  unlockScroll();
+});
+
 const handleOpen = () => {
   isOpen.value = true;
+  unlockScroll();
   emit('open');
 };
 </script>
@@ -27,7 +50,9 @@ const handleOpen = () => {
   <Transition name="fade">
     <div
       v-if="!isOpen"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 select-none"
+      @touchmove.prevent
+      @wheel.prevent
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 select-none touch-none overflow-hidden"
       :class="
         theme === 'v1'
           ? 'bg-gradient-to-b from-[#FFFDF8] via-[#FFF9EE]/98 to-[#FFF6E5]/98'
@@ -85,7 +110,7 @@ const handleOpen = () => {
         </p>
 
         <h3
-          class="font-heading text-xl sm:text-2xl font-bold mb-2 tracking-wide"
+          class="font-heading text-xl sm:text-2xl font-bold mb-2 tracking-wide my-4"
           :class="theme === 'v1' ? 'text-primary' : 'text-amber-100'"
         >
           {{ guestName }}

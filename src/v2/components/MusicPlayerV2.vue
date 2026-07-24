@@ -38,7 +38,7 @@ const tryPlay = () => {
       playerRef.value.playVideo();
     }
   } catch (e) {
-    // Autoplay blocked by browser policy until user interaction
+    // Audio blocked by browser policy
   }
 };
 
@@ -64,21 +64,6 @@ const toggleMusic = () => {
   }
 };
 
-const handleUserInteraction = () => {
-  userHasInteracted.value = true;
-  if (playerRef.value) {
-    tryPlay();
-  }
-};
-
-const removeInteractionListeners = () => {
-  window.removeEventListener('pointerdown', handleUserInteraction);
-  window.removeEventListener('click', handleUserInteraction);
-  window.removeEventListener('touchstart', handleUserInteraction);
-  window.removeEventListener('scroll', handleUserInteraction);
-  window.removeEventListener('keydown', handleUserInteraction);
-};
-
 const createPlayer = () => {
   if ((window as any).YT && (window as any).YT.Player) {
     playerRef.value = new (window as any).YT.Player(containerId, {
@@ -86,8 +71,8 @@ const createPlayer = () => {
       width: '1',
       videoId: props.youtubeId,
       playerVars: {
-        autoplay: 1,
-        start: startTimeSeconds, // Start playback at 14 seconds (0:14)
+        autoplay: 0,
+        start: startTimeSeconds,
         loop: 1,
         playlist: props.youtubeId,
         controls: 0,
@@ -98,14 +83,8 @@ const createPlayer = () => {
       },
       events: {
         onReady: (event: any) => {
-          try {
-            event.target.unMute();
-            if (typeof event.target.seekTo === 'function') {
-              event.target.seekTo(startTimeSeconds, true);
-            }
-            event.target.playVideo();
-          } catch (e) {
-            // Autoplay waiting for interaction
+          if (typeof event.target.seekTo === 'function') {
+            event.target.seekTo(startTimeSeconds, true);
           }
           if (userHasInteracted.value) {
             tryPlay();
@@ -115,7 +94,6 @@ const createPlayer = () => {
           // YT.PlayerState.PLAYING = 1, PAUSED = 2, ENDED = 0
           if (event.data === 1) {
             isPlaying.value = true;
-            removeInteractionListeners();
           } else if (event.data === 2 || event.data === 0) {
             isPlaying.value = false;
           }
@@ -161,15 +139,9 @@ watch(
 
 onMounted(() => {
   initYouTubeAPI();
-  window.addEventListener('pointerdown', handleUserInteraction);
-  window.addEventListener('click', handleUserInteraction);
-  window.addEventListener('touchstart', handleUserInteraction);
-  window.addEventListener('scroll', handleUserInteraction);
-  window.addEventListener('keydown', handleUserInteraction);
 });
 
 onUnmounted(() => {
-  removeInteractionListeners();
   if (playerRef.value && typeof playerRef.value.destroy === 'function') {
     playerRef.value.destroy();
   }
