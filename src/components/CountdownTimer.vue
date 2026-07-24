@@ -39,7 +39,7 @@ const updateTimer = () => {
 
   days.value = Math.floor(distance / (1000 * 60 * 60 * 24));
   hours.value = Math.floor(
-    (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
   );
   minutes.value = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
   seconds.value = Math.floor((distance % (1000 * 60)) / 1000);
@@ -64,13 +64,28 @@ const timerItems = computed(() => [
 
 <template>
   <div class="w-full my-4">
-    <div v-if="isExpired" class="flex items-center justify-center gap-2 py-3 text-secondary-dark font-heading text-base">
-      <svg class="w-4 h-4 text-secondary animate-pulse" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2z" />
+    <div
+      v-if="isExpired"
+      class="flex items-center justify-center gap-2 py-3 text-secondary-dark font-heading text-base"
+    >
+      <svg
+        class="w-4 h-4 text-secondary animate-pulse"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path
+          d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2z"
+        />
       </svg>
       <span>ពិធីបានចាប់ផ្តើមហើយ!</span>
-      <svg class="w-4 h-4 text-secondary animate-pulse" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2z" />
+      <svg
+        class="w-4 h-4 text-secondary animate-pulse"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path
+          d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2z"
+        />
       </svg>
     </div>
     <div v-else class="grid grid-cols-4 gap-2 sm:gap-3.5 max-w-md mx-auto">
@@ -80,13 +95,23 @@ const timerItems = computed(() => [
         class="group relative flex flex-col items-center justify-center p-2.5 sm:p-3.5 rounded-2xl bg-gradient-to-b from-[#FFFDF8] via-[#FFF9EE] to-[#FFF6E5] border border-secondary/40 shadow-[0_4px_16px_rgba(197,160,70,0.15)] hover:border-secondary/70 transition-all duration-300 backdrop-blur-sm"
       >
         <!-- Gold foil Corner Accents (V1 Gold color) -->
-        <div class="absolute top-1 left-1 w-1.5 h-1.5 border-t border-l border-secondary/60" />
-        <div class="absolute top-1 right-1 w-1.5 h-1.5 border-t border-r border-secondary/60" />
-        <div class="absolute bottom-1 left-1 w-1.5 h-1.5 border-b border-l border-secondary/60" />
-        <div class="absolute bottom-1 right-1 w-1.5 h-1.5 border-b border-r border-secondary/60" />
+        <div
+          class="absolute top-1 left-1 w-1.5 h-1.5 border-t border-l border-secondary/60"
+        />
+        <div
+          class="absolute top-1 right-1 w-1.5 h-1.5 border-t border-r border-secondary/60"
+        />
+        <div
+          class="absolute bottom-1 left-1 w-1.5 h-1.5 border-b border-l border-secondary/60"
+        />
+        <div
+          class="absolute bottom-1 right-1 w-1.5 h-1.5 border-b border-r border-secondary/60"
+        />
 
         <!-- Khmer Number (V1 Secondary Dark Gold Gradient) -->
-        <span class="font-heading text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-secondary-dark via-amber-800 to-secondary-dark tracking-wider">
+        <span
+          class="font-heading text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-secondary-dark via-amber-800 to-secondary-dark tracking-wider"
+        >
           {{ toKhmerNum(item.val) }}
         </span>
 

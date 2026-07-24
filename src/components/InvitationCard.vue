@@ -17,7 +17,10 @@ const openLightbox = (index: number) => {
 };
 
 const onOpenEnvelope = () => {
-  if (musicPlayerRef.value && typeof musicPlayerRef.value.playMusic === 'function') {
+  if (
+    musicPlayerRef.value &&
+    typeof musicPlayerRef.value.playMusic === 'function'
+  ) {
     musicPlayerRef.value.playMusic();
   }
 };
@@ -397,7 +400,9 @@ const onMouseMove = (e: MouseEvent) => {
 
         <!-- Main Title -->
         <div class="fade-in mt-1 mb-3">
-          <h2 class="font-heading text-2xl sm:text-3xl text-primary font-bold tracking-wide">
+          <h2
+            class="font-heading text-2xl sm:text-3xl text-primary font-bold tracking-wide"
+          >
             ពិធីភ្ជាប់ពាក្យ
           </h2>
           <!-- Golden Ornament Line -->
@@ -1002,6 +1007,10 @@ const onMouseMove = (e: MouseEvent) => {
     />
 
     <!-- Ambient YouTube Music Player -->
-    <MusicPlayerV2 ref="musicPlayerRef" :youtube-id="youtubeMusicId" theme="v1" />
+    <MusicPlayerV2
+      ref="musicPlayerRef"
+      :youtube-id="youtubeMusicId"
+      theme="v1"
+    />
   </div>
 </template>

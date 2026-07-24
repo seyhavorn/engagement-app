@@ -35,6 +35,14 @@ html, body {
   background-color: var(--color-ivory);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Prevent iOS Safari input focus auto-zoom */
+input, textarea, select {
+  font-size: 16px !important;
+  touch-action: manipulation;
 }
 
 #app {

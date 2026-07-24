@@ -136,7 +136,9 @@ function handleOverlayClick(e: MouseEvent) {
                 <h3 class="font-accent text-xl sm:text-2xl text-primary">
                   សូមឆ្លើយតប
                 </h3>
-                <p class="font-body text-xs text-primary-muted mt-1 tracking-wide">
+                <p
+                  class="font-body text-xs text-primary-muted mt-1 tracking-wide"
+                >
                   សូមឆ្លើយតបមុនថ្ងៃទី១ ខែធ្នូ ឆ្នាំ២០២៦
                 </p>
               </div>
@@ -178,7 +180,8 @@ function handleOverlayClick(e: MouseEvent) {
                   <label
                     class="block text-xs font-body font-medium text-primary-muted mb-1 tracking-wide"
                   >
-                    តើអ្នកនឹងចូលរួមទេ? <span class="text-secondary-dark">*</span>
+                    តើអ្នកនឹងចូលរួមទេ?
+                    <span class="text-secondary-dark">*</span>
                   </label>
                   <div class="flex gap-3">
                     <label
