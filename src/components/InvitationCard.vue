@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { useRoute } from 'vue-router';
 import CountdownTimer from './CountdownTimer.vue';
 import EventSchedule from './EventSchedule.vue';
 import RsvpModal from './RsvpModal.vue';
@@ -27,10 +28,24 @@ const onOpenEnvelope = () => {
 };
 
 // ── ឈ្មោះភ្ញៀវពី URL (e.g. ?name=សុជាតិ) ──
-const urlParams = new URLSearchParams(window.location.search);
-const guestName = computed(() => urlParams.get('name') || 'សុជាតិ និង​អនាគត');
+const route = useRoute();
+
+const getQueryParam = (key: string): string | null => {
+  if (route.query[key] && typeof route.query[key] === 'string') {
+    return route.query[key] as string;
+  }
+  if (window.location.hash.includes('?')) {
+    const hashParams = new URLSearchParams(window.location.hash.split('?')[1]);
+    const val = hashParams.get(key);
+    if (val) return val;
+  }
+  const searchParams = new URLSearchParams(window.location.search);
+  return searchParams.get(key);
+};
+
+const guestName = computed(() => getQueryParam('name') || 'សុជាតិ និង​អនាគត');
 const youtubeMusicId = computed(
-  () => urlParams.get('yt') || urlParams.get('music') || 'XKNgycbj1qo',
+  () => getQueryParam('yt') || getQueryParam('music') || 'XKNgycbj1qo',
 );
 
 // ── ព័ត៌មានអំពីពិធី ──
