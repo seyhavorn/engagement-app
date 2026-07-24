@@ -52,7 +52,7 @@ const handleOpen = () => {
       v-if="!isOpen"
       @touchmove.prevent
       @wheel.prevent
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 select-none touch-none overflow-hidden"
+      class="fixed inset-0 z-50 flex items-center justify-center p-3 select-none touch-none overflow-hidden"
       :class="
         theme === 'v1'
           ? 'bg-gradient-to-b from-[#FFFDF8] via-[#FFF9EE]/98 to-[#FFF6E5]/98'
@@ -71,7 +71,7 @@ const handleOpen = () => {
 
       <!-- ═══ Main Envelope Card ═══ -->
       <div
-        class="envelope-card relative w-full max-w-[360px] rounded-[28px] border-2 text-center backdrop-blur-xl overflow-hidden"
+        class="envelope-card relative w-full max-w-[430px] rounded-[28px] border-2 text-center backdrop-blur-xl overflow-hidden"
         :class="
           theme === 'v1'
             ? 'bg-[#FFFDF8]/95 backdrop-blur-md border-secondary/30 shadow-[0_12px_60px_rgba(197,160,70,0.12),0_4px_25px_rgba(0,0,0,0.04)] text-primary'
