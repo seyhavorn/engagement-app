@@ -7,7 +7,7 @@
  */
 
 const DEFAULT_SHEET_URL =
-  'https://script.google.com/macros/s/AKfycbzSdqTOFn2p-yXer6BKuuA03XrYD6MllrzWEPXMM_9IiuMuaoebbx3q9Ga8iccGaa1adw/exec';
+  'https://script.google.com/macros/s/AKfycbxwIohq7JgW_zqDF9Iea2e1zI8ix9gkuv39uubnLDorDm24YQJDWml3Phl8NNsQTV87/exec';
 
 const SHEET_URL = import.meta.env.VITE_GOOGLE_SHEET_URL || DEFAULT_SHEET_URL;
 
@@ -49,18 +49,10 @@ function formatDate(date: Date): string {
   );
 }
 
-function buildGetUrl(baseUrl: string, data: Record<string, string>): string {
-  const params = new URLSearchParams();
-  for (const [key, value] of Object.entries(data)) {
-    params.set(key, value);
-  }
-  return `${baseUrl}?${params.toString()}`;
-}
-
 export function useGoogleSheet() {
   /**
    * Track an envelope open event using Google Apps Script Web App endpoint.
-   * Dispatches both GET and POST to ensure saving on all browsers.
+   * Sends EXACTLY ONE POST request per session to prevent duplicate rows.
    */
   const trackOpen = (guestName: string, theme: 'v1' | 'v2' = 'v1') => {
     if (!SHEET_URL || hasSent) return;
@@ -76,17 +68,7 @@ export function useGoogleSheet() {
     };
 
     const jsonText = JSON.stringify(payload);
-    const getUrl = buildGetUrl(SHEET_URL, payload);
 
-    // Method 1: Image Pixel (GET)
-    try {
-      const img = new Image();
-      img.src = getUrl;
-    } catch {
-      // Ignore
-    }
-
-    // Method 2: POST fetch (text/plain body)
     try {
       fetch(SHEET_URL, {
         method: 'POST',
@@ -96,7 +78,9 @@ export function useGoogleSheet() {
         },
         body: jsonText,
         keepalive: true,
-      }).catch(() => {});
+      }).catch(() => {
+        hasSent = false;
+      });
     } catch {
       hasSent = false;
     }
