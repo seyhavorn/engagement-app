@@ -110,7 +110,7 @@ const handleOpen = () => {
         </p>
 
         <h3
-          class="font-heading text-xl sm:text-2xl font-bold mb-2 tracking-wide my-4"
+          class="font-heading text-xl font-bold mb-2 tracking-wide my-4"
           :class="theme === 'v1' ? 'text-primary' : 'text-amber-100'"
         >
           {{ guestName }}
