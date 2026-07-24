@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
+import { useMetadata } from './composables/useMetadata';
 
 const route = useRoute();
 const router = useRouter();
+
+useMetadata();
 
 const switchDesign = (design: string) => {
   const currentQuery = route.query;
