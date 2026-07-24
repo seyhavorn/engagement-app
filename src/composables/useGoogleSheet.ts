@@ -40,9 +40,12 @@ function getBrowserInfo(): string {
 
 function formatDate(date: Date): string {
   const pad = (n: number) => String(n).padStart(2, '0');
+  const hours24 = date.getHours();
+  const ampm = hours24 >= 12 ? 'PM' : 'AM';
+  const hours12 = hours24 % 12 || 12;
   return (
     `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ` +
-    `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
+    `${pad(hours12)}:${pad(date.getMinutes())}:${pad(date.getSeconds())} ${ampm}`
   );
 }
 
