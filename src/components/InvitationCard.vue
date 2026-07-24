@@ -73,6 +73,7 @@ const coupleImages = [
   `/images/couple_8.JPG`,
   `/images/couple_9.JPG`,
   `/images/couple_10.JPG`,
+  `/images/couple_11.JPG`,
 ];
 
 const carouselContainer = ref<HTMLElement | null>(null);
