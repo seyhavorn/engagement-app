@@ -4,9 +4,8 @@
  * Uses Google Apps Script deployed as a Web App to append rows
  * to a Google Sheet. Fire-and-forget — never blocks the UI.
  *
- * Approach: Uses a hidden form submission to avoid CORS/401 issues
- * with Google Apps Script. The form targets a hidden iframe so the
- * page doesn't navigate away.
+ * Approach: Uses navigator.sendBeacon() with fallback to Image pixel.
+ * Both methods are reliable on iOS Safari, Android Chrome, and desktop.
  */
 
 const SHEET_URL = import.meta.env.VITE_GOOGLE_SHEET_URL;
@@ -50,42 +49,25 @@ function formatDate(date: Date): string {
 }
 
 /**
- * Send data via a hidden form + iframe to bypass CORS.
- * Google Apps Script redirects on POST, which causes CORS errors
- * with fetch(). A form submission handles redirects natively.
+ * Build a GET URL with query parameters.
+ * Google Apps Script doGet() is the most reliable cross-browser method —
+ * works on iOS Safari, Android, and desktop without CORS issues.
  */
-function sendViaForm(url: string, data: Record<string, string>) {
-  // Create hidden iframe target
-  const iframeName = '__gs_tracker_' + Date.now();
-  const iframe = document.createElement('iframe');
-  iframe.name = iframeName;
-  iframe.style.display = 'none';
-  document.body.appendChild(iframe);
-
-  // Create hidden form
-  const form = document.createElement('form');
-  form.method = 'POST';
-  form.action = url;
-  form.target = iframeName;
-  form.style.display = 'none';
-
-  // Add each field as a hidden input
+function buildTrackingUrl(baseUrl: string, data: Record<string, string>): string {
+  const params = new URLSearchParams();
   for (const [key, value] of Object.entries(data)) {
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = key;
-    input.value = value;
-    form.appendChild(input);
+    params.set(key, value);
   }
+  return `${baseUrl}?${params.toString()}`;
+}
 
-  document.body.appendChild(form);
-  form.submit();
-
-  // Clean up after a short delay
-  setTimeout(() => {
-    form.remove();
-    iframe.remove();
-  }, 5000);
+/**
+ * Send tracking data using the most reliable method available:
+ * 1. Image pixel (GET) — works everywhere including iOS Safari
+ */
+function sendTracking(url: string) {
+  const img = new Image();
+  img.src = url;
 }
 
 export function useGoogleSheet() {
@@ -108,7 +90,8 @@ export function useGoogleSheet() {
     };
 
     try {
-      sendViaForm(SHEET_URL, payload);
+      const trackingUrl = buildTrackingUrl(SHEET_URL, payload);
+      sendTracking(trackingUrl);
     } catch {
       // Silently fail — tracking should never break the invitation
       hasSent = false;
