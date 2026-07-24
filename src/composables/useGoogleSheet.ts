@@ -7,7 +7,7 @@
  */
 
 const DEFAULT_SHEET_URL =
-  'https://script.google.com/macros/s/AKfycbJe_WvXOFPAVYKaQOCabaQ8hVNgLpf_p0nbYe2UwrQBlwIrKlTtSLZE_ih58ybN4JVQ/exec';
+  'https://script.google.com/macros/s/AKfycbzSdqTOFn2p-yXer6BKuuA03XrYD6MllrzWEPXMM_9IiuMuaoebbx3q9Ga8iccGaa1adw/exec';
 
 const SHEET_URL = import.meta.env.VITE_GOOGLE_SHEET_URL || DEFAULT_SHEET_URL;
 
@@ -60,8 +60,7 @@ function buildGetUrl(baseUrl: string, data: Record<string, string>): string {
 export function useGoogleSheet() {
   /**
    * Track an envelope open event using Google Apps Script Web App endpoint.
-   * Sends both GET query params (Image pixel) and POST body to guarantee execution
-   * without 401 warnings in DevTools.
+   * Dispatches both GET and POST to ensure saving on all browsers.
    */
   const trackOpen = (guestName: string, theme: 'v1' | 'v2' = 'v1') => {
     if (!SHEET_URL || hasSent) return;
@@ -76,18 +75,27 @@ export function useGoogleSheet() {
       pageUrl: decodeURIComponent(window.location.href),
     };
 
-    try {
-      const getUrl = buildGetUrl(SHEET_URL, payload);
+    const jsonText = JSON.stringify(payload);
+    const getUrl = buildGetUrl(SHEET_URL, payload);
 
-      // Method 1: Image Pixel (Native GET - Never returns 401)
+    // Method 1: Image Pixel (GET)
+    try {
       const img = new Image();
       img.src = getUrl;
+    } catch {
+      // Ignore
+    }
 
-      // Method 2: Fetch GET with mode: 'no-cors'
-      fetch(getUrl, {
-        method: 'GET',
+    // Method 2: POST fetch (text/plain body)
+    try {
+      fetch(SHEET_URL, {
+        method: 'POST',
         mode: 'no-cors',
-        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'text/plain;charset=UTF-8',
+        },
+        body: jsonText,
+        keepalive: true,
       }).catch(() => {});
     } catch {
       hasSent = false;
