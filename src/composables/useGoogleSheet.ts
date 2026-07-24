@@ -1,13 +1,11 @@
 /**
- * Composable to track invitation envelope opens via Google Sheets.
+ * Composable to track invitation envelope opens via Google Sheets Apps Script.
  *
- * Uses Google Apps Script deployed as a Web App to append rows
- * to a Google Sheet. Fire-and-forget — never blocks the UI.
+ * Uses Google Apps Script Web App endpoint (VITE_GOOGLE_SHEET_URL).
  *
- * Fully optimized for iOS Safari, Android, and Desktop.
+ * Fire-and-forget background tracking — never blocks the UI.
  */
 
-// Fallback to active deployed URL if env variable is missing during static build
 const DEFAULT_SHEET_URL =
   'https://script.google.com/macros/s/AKfycbxJe_WvXOFPAVYKaQOCabaQ8hVNgLpf_p0nbYe2UwrQBlwIrKlTtSLZE_ih58ybN4JVQ/exec';
 
@@ -51,70 +49,15 @@ function formatDate(date: Date): string {
   );
 }
 
-/**
- * Build a GET URL with query parameters.
- * Google Apps Script doGet() is the most reliable cross-browser method —
- * works on iOS Safari, Android, and desktop without CORS issues.
- */
-function buildTrackingUrl(baseUrl: string, data: Record<string, string>): string {
-  const params = new URLSearchParams();
-  for (const [key, value] of Object.entries(data)) {
-    params.set(key, value);
-  }
-  return `${baseUrl}?${params.toString()}`;
-}
-
-/**
- * Robust Multi-Dispatch for iOS Safari, Android, and Desktop:
- * 1. Fetch with keepalive: true (iOS WebKit background request persistence)
- * 2. DOM-attached Image element (prevents iOS Safari garbage collection cancellation)
- */
-function sendTracking(url: string) {
-  // Method 1: Modern fetch with keepalive (iOS 13+)
-  try {
-    fetch(url, {
-      method: 'GET',
-      mode: 'no-cors',
-      keepalive: true,
-      cache: 'no-cache',
-    }).catch(() => {});
-  } catch {
-    // Ignore fetch error
-  }
-
-  // Method 2: DOM-attached Image Pixel (fixes iOS Safari JS garbage collection)
-  try {
-    const img = document.createElement('img');
-    img.style.position = 'absolute';
-    img.style.width = '1px';
-    img.style.height = '1px';
-    img.style.opacity = '0';
-    img.style.pointerEvents = 'none';
-    img.src = `${url}&_t=${Date.now()}`;
-    document.body.appendChild(img);
-
-    // Clean up DOM after 15 seconds
-    setTimeout(() => {
-      if (img && img.parentNode) {
-        img.parentNode.removeChild(img);
-      }
-    }, 15000);
-  } catch {
-    // Ignore DOM error
-  }
-}
-
 export function useGoogleSheet() {
   /**
-   * Track an envelope open event.
-   * Sends guest info to Google Sheets in the background.
+   * Track an envelope open event using Google Apps Script Web App endpoint.
    */
   const trackOpen = (guestName: string, theme: 'v1' | 'v2' = 'v1') => {
-    // Skip if no URL configured or already sent this session
     if (!SHEET_URL || hasSent) return;
     hasSent = true;
 
-    const payload: Record<string, string> = {
+    const payload = {
       guestName,
       openedAt: formatDate(new Date()),
       theme,
@@ -123,11 +66,30 @@ export function useGoogleSheet() {
       pageUrl: decodeURIComponent(window.location.href),
     };
 
+    const jsonText = JSON.stringify(payload);
+
+    // Method 1: navigator.sendBeacon (Supported natively on iOS Safari 11.1+ and Android)
+    if (navigator.sendBeacon) {
+      try {
+        const blob = new Blob([jsonText], { type: 'text/plain;charset=UTF-8' });
+        navigator.sendBeacon(SHEET_URL, blob);
+      } catch {
+        // Fallback to fetch
+      }
+    }
+
+    // Method 2: fetch with mode: 'no-cors' and text/plain content type (prevents preflight OPTIONS 401/405 errors)
     try {
-      const trackingUrl = buildTrackingUrl(SHEET_URL, payload);
-      sendTracking(trackingUrl);
+      fetch(SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'text/plain;charset=UTF-8',
+        },
+        body: jsonText,
+        keepalive: true,
+      }).catch(() => {});
     } catch {
-      // Silently fail — tracking should never break the invitation
       hasSent = false;
     }
   };
