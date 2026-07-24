@@ -3,13 +3,31 @@ import { ref, computed } from 'vue';
 import CountdownTimer from './CountdownTimer.vue';
 import RsvpModal from './RsvpModal.vue';
 import MusicPlayerV2 from '../v2/components/MusicPlayerV2.vue';
+import PhotoLightboxModalV2 from '../v2/components/PhotoLightboxModalV2.vue';
+import OpenEnvelopeModal from './OpenEnvelopeModal.vue';
 
 const showRsvp = ref(false);
+const showLightbox = ref(false);
+const selectedPhotoIndex = ref(0);
+const musicPlayerRef = ref<any>(null);
+
+const openLightbox = (index: number) => {
+  selectedPhotoIndex.value = index;
+  showLightbox.value = true;
+};
+
+const onOpenEnvelope = () => {
+  if (musicPlayerRef.value && typeof musicPlayerRef.value.playMusic === 'function') {
+    musicPlayerRef.value.playMusic();
+  }
+};
 
 // ── ឈ្មោះភ្ញៀវពី URL (e.g. ?name=សុជាតិ) ──
 const urlParams = new URLSearchParams(window.location.search);
-const guestName = computed(() => urlParams.get('name') || 'សុជាតិ');
-const youtubeMusicId = computed(() => urlParams.get('yt') || urlParams.get('music') || 'XKNgycbj1qo');
+const guestName = computed(() => urlParams.get('name') || 'សុជាតិ និង​អនាគត');
+const youtubeMusicId = computed(
+  () => urlParams.get('yt') || urlParams.get('music') || 'XKNgycbj1qo',
+);
 
 // ── ព័ត៌មានអំពីពិធី ──
 const groomName = 'វន សីហា';
@@ -17,11 +35,11 @@ const brideName = 'សួង ដាវីត';
 const eventDate = 'ថ្ងៃសៅរ៍ ទី២២ ខែសីហា ឆ្នាំ២០២៦';
 const eventTime = 'ម៉ោង ៨:០០ ព្រឹក';
 const venueName = 'គេហដ្ឋានខាងស្រី';
-const venueAddress = 'ឃុំចម្ប៉ា ស្រុកព្រៃកប្បាស ខេត្តតាកែវ';
+const venueAddress = 'ភូមិឬស្សីថ្មី ឃុំចំប៉ា ស្រុកព្រៃកប្បាស ខេត្តតាកែវ';
 const invitationMessage =
   'បេះដូងពីរ ស្នេហាមួយ ការចាប់ផ្តើមដ៏ស្រស់ស្អាតមួយ។ យើងខ្ញុំសូមអញ្ជើញលោក លោកស្រី អ្នកនាង កញ្ញា មកចូលរួមអបអរសាទរក្នុងពិធីភ្ជាប់ពាក្យរបស់យើងខ្ញុំ ដើម្បីជាសាក្សីនៃការចាប់ផ្តើមនៃស្នេហាដ៏អស់កល្បរបស់យើង។';
 const countdownTarget = '2026-08-22T08:00:00';
-const googleMapsUrl = 'https://maps.app.goo.gl/ArXiX3o1sq2NTui99';
+const googleMapsUrl = 'https://maps.app.goo.gl/pZACuQjEsbPy44hv5';
 
 // ── Gallery State ──
 const activeImageIndex = ref(0);
@@ -99,6 +117,8 @@ const onMouseMove = (e: MouseEvent) => {
     class="relative min-h-screen min-h-[100dvh] w-full flex flex-col items-center justify-start overflow-x-hidden py-8 px-3 sm:py-12 sm:px-6 gap-8 sm:gap-12"
     style="overflow-y: auto; -webkit-overflow-scrolling: touch"
   >
+    <!-- Interactive Ceremonial Open Envelope Modal -->
+    <OpenEnvelopeModal :guest-name="guestName" @open="onOpenEnvelope" />
     <!-- Background Image with Soft Texture -->
     <div
       class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 opacity-60"
@@ -375,16 +395,9 @@ const onMouseMove = (e: MouseEvent) => {
           </div>
         </div>
 
-        <!-- Header: "សូមគោរពអញ្ជើញចូលរួម" -->
-        <div class="fade-in fade-in-delay-1 mb-3">
-          <p
-            class="font-body text-xs sm:text-sm tracking-[0.15em] text-secondary font-medium uppercase"
-          >
-            សូមគោរពអញ្ជើញចូលរួម
-          </p>
-          <h2
-            class="font-heading text-lg sm:text-xl tracking-wide text-primary font-normal mt-1"
-          >
+        <!-- Main Title -->
+        <div class="fade-in mt-1 mb-3">
+          <h2 class="font-heading text-2xl sm:text-3xl text-primary font-bold tracking-wide">
             ពិធីភ្ជាប់ពាក្យ
           </h2>
           <!-- Golden Ornament Line -->
@@ -423,14 +436,14 @@ const onMouseMove = (e: MouseEvent) => {
           />
 
           <p
-            class="relative z-10 font-body text-[10px] tracking-wider text-primary-muted uppercase"
+            class="relative z-10 font-body text-xs text-secondary-dark font-semibold tracking-wider"
           >
-            ជូនចំពោះ
+            សូមគោរពអញ្ជើញ
           </p>
           <p
-            class="relative z-10 font-heading text-base sm:text-lg text-secondary-dark font-normal mt-0.5"
+            class="relative z-10 font-heading text-xl sm:text-2xl text-secondary-dark font-bold mt-0.5 tracking-wide"
           >
-            លោក {{ guestName }} និង អនាគត
+            {{ guestName }}
           </p>
         </div>
 
@@ -452,13 +465,13 @@ const onMouseMove = (e: MouseEvent) => {
                 />
               </svg>
               <span
-                class="font-body text-[10px] sm:text-xs text-secondary font-semibold tracking-wider"
+                class="font-body text-xs text-secondary font-semibold tracking-wider"
               >
                 កូនប្រុស
               </span>
             </div>
             <h1
-              class="font-heading text-xl sm:text-2xl md:text-3xl text-primary font-normal leading-tight tracking-wide"
+              class="font-heading text-2xl sm:text-3xl text-primary font-semibold leading-relaxed py-0.5 tracking-wide"
             >
               {{ groomName }}
             </h1>
@@ -467,7 +480,7 @@ const onMouseMove = (e: MouseEvent) => {
           <!-- Center: Gold Calligraphy Ampersand -->
           <div class="flex items-center justify-center shrink-0">
             <span
-              class="font-script text-2xl sm:text-3xl md:text-4xl text-secondary-dark italic leading-none"
+              class="font-script text-4xl sm:text-5xl text-secondary-dark italic leading-none drop-shadow-xs"
             >
               &amp;
             </span>
@@ -487,13 +500,13 @@ const onMouseMove = (e: MouseEvent) => {
                 />
               </svg>
               <span
-                class="font-body text-[10px] sm:text-xs text-secondary font-semibold tracking-wider"
+                class="font-body text-xs text-secondary font-semibold tracking-wider"
               >
                 កូនស្រី
               </span>
             </div>
             <h1
-              class="font-heading text-xl sm:text-2xl md:text-3xl text-primary font-normal leading-tight tracking-wide"
+              class="font-heading text-2xl sm:text-3xl text-primary font-semibold leading-relaxed py-0.5 tracking-wide"
             >
               {{ brideName }}
             </h1>
@@ -520,11 +533,30 @@ const onMouseMove = (e: MouseEvent) => {
           />
         </div>
 
-        <!-- Date & Time Section -->
-        <div class="fade-in fade-in-delay-3 my-3">
-          <div class="flex justify-center mb-1 text-secondary">
+        <!-- Redesigned Prominent Date & Time Section -->
+        <div
+          class="fade-in fade-in-delay-3 my-6 p-5 sm:p-6 rounded-2xl bg-gradient-to-b from-[#FFFDF8] via-[#FFF9EE] to-[#FFF6E5] border-2 border-secondary/40 shadow-[0_8px_30px_rgba(197,160,70,0.18)] relative overflow-hidden text-center group hover:border-secondary/70 transition-all duration-300"
+        >
+          <!-- Gold Ornament Accents -->
+          <div
+            class="absolute top-2 left-2 w-2.5 h-2.5 border-t-2 border-l-2 border-secondary/70"
+          />
+          <div
+            class="absolute top-2 right-2 w-2.5 h-2.5 border-t-2 border-r-2 border-secondary/70"
+          />
+          <div
+            class="absolute bottom-2 left-2 w-2.5 h-2.5 border-b-2 border-l-2 border-secondary/70"
+          />
+          <div
+            class="absolute bottom-2 right-2 w-2.5 h-2.5 border-b-2 border-r-2 border-secondary/70"
+          />
+
+          <!-- Calendar Header Tag -->
+          <div
+            class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-secondary/15 border border-secondary/30 text-secondary-dark font-body text-xs font-semibold mb-2"
+          >
             <svg
-              class="w-4 h-4"
+              class="w-4 h-4 text-secondary-dark"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -535,15 +567,31 @@ const onMouseMove = (e: MouseEvent) => {
               <line x1="8" y1="2" x2="8" y2="6" />
               <line x1="3" y1="10" x2="21" y2="10" />
             </svg>
+            <span>កាលបរិច្ឆេទសិរីមង្គល</span>
           </div>
-          <p
-            class="font-accent text-xs sm:text-sm tracking-wide text-primary font-bold"
+
+          <!-- Prominent Date Text -->
+          <h3
+            class="font-heading text-lg sm:text-xl font-bold tracking-wide text-secondary-dark leading-relaxed py-1 block"
           >
             {{ eventDate }}
-          </p>
-          <p class="font-body text-xs text-primary-muted mt-0.5">
-            {{ eventTime }}
-          </p>
+          </h3>
+
+          <!-- Time Pill -->
+          <div
+            class="inline-flex items-center justify-center gap-1.5 mt-3 px-4 py-1.5 rounded-full bg-secondary/10 border border-secondary/30 text-secondary-dark font-body text-xs sm:text-sm font-semibold"
+          >
+            <svg
+              class="w-3.5 h-3.5 text-secondary-dark"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"
+              />
+            </svg>
+            <span>{{ eventTime }}</span>
+          </div>
         </div>
 
         <!-- Venue Section -->
@@ -702,28 +750,28 @@ const onMouseMove = (e: MouseEvent) => {
 
       <!-- Card Main Content Container -->
       <div class="relative z-10 px-6 py-8 sm:px-10 sm:py-11 text-center">
-        <!-- Title: រូបភាពអនុស្សាវរីយ៍ -->
-        <div class="fade-in mb-5">
+        <!-- Title: រូបភាពអនុស្សាវរីយ៍ (Gallery of Love) -->
+        <div class="fade-in mb-5 text-center">
           <h2
-            class="font-heading text-lg sm:text-xl tracking-wide text-primary font-normal"
+            class="font-heading text-xl sm:text-2xl text-primary font-bold tracking-wide"
           >
             រូបភាពអនុស្សាវរីយ៍
           </h2>
           <p
-            class="font-body text-[10px] sm:text-xs text-secondary font-medium tracking-widest uppercase mt-0.5"
+            class="font-script text-lg sm:text-xl text-secondary-dark italic mt-0.5"
           >
             Gallery of Love
           </p>
           <div class="flex items-center justify-center gap-2 mt-2 opacity-60">
-            <div class="h-[1px] w-8 bg-secondary" />
+            <div class="h-[1px] w-10 bg-secondary" />
             <div class="w-1.5 h-1.5 rounded-full bg-secondary" />
-            <div class="h-[1px] w-8 bg-secondary" />
+            <div class="h-[1px] w-10 bg-secondary" />
           </div>
         </div>
 
         <!-- Swipeable Featured Couple Images Carousel -->
         <div
-          class="relative w-full aspect-[3/4] rounded-2xl border-2 border-secondary/40 overflow-hidden shadow-md mb-4 bg-[#1E1816]"
+          class="relative w-full aspect-[3/4] rounded-2xl border-2 border-secondary/40 overflow-hidden shadow-lg mb-4 bg-[#1E1816] group cursor-pointer"
         >
           <!-- Horizontally Scrollable Container for Large Images -->
           <div
@@ -743,31 +791,51 @@ const onMouseMove = (e: MouseEvent) => {
             <div
               v-for="(img, idx) in coupleImages"
               :key="idx"
-              class="w-full h-full shrink-0 snap-center relative"
+              @click="openLightbox(idx)"
+              class="w-full h-full shrink-0 snap-center relative group"
             >
               <img
                 :src="img"
                 alt="Seyha & David"
-                class="w-full h-full object-contain sm:object-cover select-none"
+                class="w-full h-full object-contain sm:object-cover select-none transition-transform duration-500 group-hover:scale-105"
                 draggable="false"
               />
               <!-- Image overlay shade -->
               <div
-                class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"
+                class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none"
               />
+
+              <!-- Tap/Click to Expand Zoom Icon Overlay -->
+              <div
+                class="absolute bottom-4 right-4 p-2 rounded-full bg-black/60 border border-secondary/50 text-secondary opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <svg
+                  class="w-4 h-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m-3-3h6"
+                  />
+                </svg>
+              </div>
             </div>
           </div>
 
           <!-- Bottom Carousel Page Indicator Dots -->
           <div
-            class="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-20"
+            class="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-20 pointer-events-none"
           >
             <span
               v-for="(_, idx) in coupleImages"
               :key="idx"
               class="w-1.5 h-1.5 rounded-full transition-all duration-300"
               :class="
-                activeImageIndex === idx ? 'bg-secondary w-3.5' : 'bg-white/65'
+                activeImageIndex === idx ? 'bg-secondary w-4' : 'bg-white/65'
               "
             />
           </div>
@@ -783,7 +851,7 @@ const onMouseMove = (e: MouseEvent) => {
             :class="
               activeImageIndex === idx
                 ? 'border-secondary shadow-md scale-105'
-                : 'border-secondary/20 hover:border-secondary/50 hover:scale-102'
+                : 'border-secondary/20 hover:border-secondary/60 hover:scale-102 opacity-80 hover:opacity-100'
             "
           >
             <img
@@ -925,7 +993,15 @@ const onMouseMove = (e: MouseEvent) => {
       @close="showRsvp = false"
     />
 
+    <!-- Lightbox Photo Viewer Modal -->
+    <PhotoLightboxModalV2
+      :visible="showLightbox"
+      :images="coupleImages"
+      :initial-index="selectedPhotoIndex"
+      @close="showLightbox = false"
+    />
+
     <!-- Ambient YouTube Music Player -->
-    <MusicPlayerV2 :youtube-id="youtubeMusicId" />
+    <MusicPlayerV2 ref="musicPlayerRef" :youtube-id="youtubeMusicId" theme="v1" />
   </div>
 </template>

@@ -90,11 +90,6 @@ const timerItems = computed(() => [
           {{ toKhmerNum(item.val) }}
         </span>
 
-        <!-- Western Digits subtitle -->
-        <span class="text-[10px] text-amber-200/50 font-mono tracking-widest -mt-0.5">
-          {{ item.val.toString().padStart(2, '0') }}
-        </span>
-
         <!-- Label -->
         <div class="mt-1 flex flex-col items-center leading-tight">
           <span class="font-body text-xs sm:text-sm text-amber-100 font-medium">

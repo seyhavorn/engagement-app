@@ -12,7 +12,7 @@ const selectedPhotoIndex = ref(0);
 
 // ── Guest Name from URL ──
 const urlParams = new URLSearchParams(window.location.search);
-const guestName = computed(() => urlParams.get('name') || 'សុជាតិ');
+const guestName = computed(() => urlParams.get('name') || 'សុជាតិ និង​អនាគត');
 const youtubeMusicId = computed(
   () => urlParams.get('yt') || urlParams.get('music') || 'XKNgycbj1qo',
 );
@@ -66,6 +66,16 @@ const openLightbox = (index: number) => {
   showLightbox.value = true;
 };
 
+import OpenEnvelopeModal from '../components/OpenEnvelopeModal.vue';
+
+const musicPlayerRef = ref<any>(null);
+
+const onOpenEnvelope = () => {
+  if (musicPlayerRef.value && typeof musicPlayerRef.value.playMusic === 'function') {
+    musicPlayerRef.value.playMusic();
+  }
+};
+
 // Copy Address feedback
 const copied = ref(false);
 const copyAddress = () => {
@@ -80,6 +90,8 @@ const copyAddress = () => {
     class="relative min-h-screen min-h-[100dvh] w-full flex flex-col items-center justify-start overflow-x-hidden py-8 px-3 sm:py-12 sm:px-6 gap-8 sm:gap-12 bg-[#09140E]"
     style="overflow-y: auto; -webkit-overflow-scrolling: touch"
   >
+    <!-- Interactive Ceremonial Open Envelope Modal -->
+    <OpenEnvelopeModal :guest-name="guestName" theme="v2" @open="onOpenEnvelope" />
     <!-- Royal Emerald Silk Background Texture with Gold Shimmer -->
     <div
       class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 mix-blend-overlay pointer-events-none"
@@ -176,7 +188,7 @@ const copyAddress = () => {
 
         <!-- Main Title -->
         <h1
-          class="font-heading text-2xl sm:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-300 to-yellow-500 font-bold tracking-wide leading-snug"
+          class="font-heading text-2xl sm:text-3xl text-amber-200 font-bold tracking-wide leading-relaxed py-1 block drop-shadow-md"
         >
           ពិធីភ្ជាប់ពាក្យ
         </h1>
@@ -271,17 +283,64 @@ const copyAddress = () => {
           {{ invitationMessage }}
         </p>
 
-        <!-- Date & Time Card -->
+        <!-- Redesigned Prominent Date & Time Card V2 -->
         <div
-          class="my-6 p-4 rounded-2xl bg-emerald-950/70 border border-amber-500/30 text-amber-200 space-y-1"
+          class="my-6 p-5 sm:p-6 rounded-2xl bg-gradient-to-b from-[#182C22]/90 via-[#102018]/95 to-[#0B1711]/95 border-2 border-amber-500/50 shadow-[0_8px_30px_rgba(0,0,0,0.5),0_0_20px_rgba(245,158,11,0.2)] relative overflow-hidden text-center backdrop-blur-md"
         >
+          <!-- Gold foil Corner Accents -->
           <div
-            class="font-heading text-base sm:text-lg font-semibold text-amber-300"
+            class="absolute top-2 left-2 w-2.5 h-2.5 border-t-2 border-l-2 border-amber-400/80"
+          />
+          <div
+            class="absolute top-2 right-2 w-2.5 h-2.5 border-t-2 border-r-2 border-amber-400/80"
+          />
+          <div
+            class="absolute bottom-2 left-2 w-2.5 h-2.5 border-b-2 border-l-2 border-amber-400/80"
+          />
+          <div
+            class="absolute bottom-2 right-2 w-2.5 h-2.5 border-b-2 border-r-2 border-amber-400/80"
+          />
+
+          <!-- Calendar Icon Header -->
+          <div
+            class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-300 font-body text-xs font-semibold mb-2"
+          >
+            <svg
+              class="w-4 h-4 text-amber-400"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            <span>កាលបរិច្ឆេទសិរីមង្គល</span>
+          </div>
+
+          <!-- Prominent Date Text -->
+          <h3
+            class="font-heading text-lg sm:text-xl font-bold text-amber-200 tracking-wide leading-relaxed py-1 block drop-shadow-md"
           >
             {{ eventDate }}
-          </div>
-          <div class="font-body text-xs text-amber-200/80 font-medium">
-            {{ eventTime }}
+          </h3>
+
+          <!-- Time Pill -->
+          <div
+            class="inline-flex items-center justify-center gap-1.5 mt-3 px-4 py-1.5 rounded-full bg-emerald-950/80 border border-amber-500/40 text-amber-200 font-body text-xs sm:text-sm font-semibold"
+          >
+            <svg
+              class="w-3.5 h-3.5 text-amber-400"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"
+              />
+            </svg>
+            <span>{{ eventTime }}</span>
           </div>
         </div>
 
@@ -520,6 +579,6 @@ const copyAddress = () => {
       @close="showLightbox = false"
     />
 
-    <MusicPlayerV2 :youtube-id="youtubeMusicId" />
+    <MusicPlayerV2 ref="musicPlayerRef" :youtube-id="youtubeMusicId" theme="v2" />
   </div>
 </template>
