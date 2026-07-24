@@ -52,6 +52,8 @@ function formatDate(date: Date): string {
 export function useGoogleSheet() {
   /**
    * Track an envelope open event using Google Apps Script Web App endpoint.
+   * Uses mode: 'no-cors' so the browser handles Google Apps Script's 302
+   * redirect as an opaque response without logging 401 in DevTools.
    */
   const trackOpen = (guestName: string, theme: 'v1' | 'v2' = 'v1') => {
     if (!SHEET_URL || hasSent) return;
@@ -68,17 +70,6 @@ export function useGoogleSheet() {
 
     const jsonText = JSON.stringify(payload);
 
-    // Method 1: navigator.sendBeacon (Supported natively on iOS Safari 11.1+ and Android)
-    if (navigator.sendBeacon) {
-      try {
-        const blob = new Blob([jsonText], { type: 'text/plain;charset=UTF-8' });
-        navigator.sendBeacon(SHEET_URL, blob);
-      } catch {
-        // Fallback to fetch
-      }
-    }
-
-    // Method 2: fetch with mode: 'no-cors' and text/plain content type (prevents preflight OPTIONS 401/405 errors)
     try {
       fetch(SHEET_URL, {
         method: 'POST',
