@@ -4,11 +4,14 @@
  * Uses Google Apps Script deployed as a Web App to append rows
  * to a Google Sheet. Fire-and-forget — never blocks the UI.
  *
- * Approach: Uses navigator.sendBeacon() with fallback to Image pixel.
- * Both methods are reliable on iOS Safari, Android Chrome, and desktop.
+ * Fully optimized for iOS Safari, Android, and Desktop.
  */
 
-const SHEET_URL = import.meta.env.VITE_GOOGLE_SHEET_URL;
+// Fallback to active deployed URL if env variable is missing during static build
+const DEFAULT_SHEET_URL =
+  'https://script.google.com/macros/s/AKfycbxJe_WvXOFPAVYKaQOCabaQ8hVNgLpf_p0nbYe2UwrQBlwIrKlTtSLZE_ih58ybN4JVQ/exec';
+
+const SHEET_URL = import.meta.env.VITE_GOOGLE_SHEET_URL || DEFAULT_SHEET_URL;
 
 /** Prevent duplicate sends within the same session */
 let hasSent = false;
@@ -62,12 +65,43 @@ function buildTrackingUrl(baseUrl: string, data: Record<string, string>): string
 }
 
 /**
- * Send tracking data using the most reliable method available:
- * 1. Image pixel (GET) — works everywhere including iOS Safari
+ * Robust Multi-Dispatch for iOS Safari, Android, and Desktop:
+ * 1. Fetch with keepalive: true (iOS WebKit background request persistence)
+ * 2. DOM-attached Image element (prevents iOS Safari garbage collection cancellation)
  */
 function sendTracking(url: string) {
-  const img = new Image();
-  img.src = url;
+  // Method 1: Modern fetch with keepalive (iOS 13+)
+  try {
+    fetch(url, {
+      method: 'GET',
+      mode: 'no-cors',
+      keepalive: true,
+      cache: 'no-cache',
+    }).catch(() => {});
+  } catch {
+    // Ignore fetch error
+  }
+
+  // Method 2: DOM-attached Image Pixel (fixes iOS Safari JS garbage collection)
+  try {
+    const img = document.createElement('img');
+    img.style.position = 'absolute';
+    img.style.width = '1px';
+    img.style.height = '1px';
+    img.style.opacity = '0';
+    img.style.pointerEvents = 'none';
+    img.src = `${url}&_t=${Date.now()}`;
+    document.body.appendChild(img);
+
+    // Clean up DOM after 15 seconds
+    setTimeout(() => {
+      if (img && img.parentNode) {
+        img.parentNode.removeChild(img);
+      }
+    }, 15000);
+  } catch {
+    // Ignore DOM error
+  }
 }
 
 export function useGoogleSheet() {
