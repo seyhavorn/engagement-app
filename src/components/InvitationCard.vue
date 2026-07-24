@@ -2,12 +2,14 @@
 import { ref, computed } from 'vue';
 import CountdownTimer from './CountdownTimer.vue';
 import RsvpModal from './RsvpModal.vue';
+import MusicPlayerV2 from '../v2/components/MusicPlayerV2.vue';
 
 const showRsvp = ref(false);
 
 // ── ឈ្មោះភ្ញៀវពី URL (e.g. ?name=សុជាតិ) ──
 const urlParams = new URLSearchParams(window.location.search);
 const guestName = computed(() => urlParams.get('name') || 'សុជាតិ');
+const youtubeMusicId = computed(() => urlParams.get('yt') || urlParams.get('music') || 'XKNgycbj1qo');
 
 // ── ព័ត៌មានអំពីពិធី ──
 const groomName = 'វន សីហា';
@@ -911,9 +913,8 @@ const onMouseMove = (e: MouseEvent) => {
       <p
         class="font-body text-[10px] sm:text-xs text-primary/60 tracking-wider"
       >
-        Created by
-        <span class="font-semibold text-secondary-dark">Seyha VORN</span>
-        (Lead Software Engineer)
+        រៀបចំ និងរចនាដោយ
+        <span class="font-semibold text-secondary-dark">វន សីហា</span>
       </p>
     </div>
 
@@ -923,5 +924,8 @@ const onMouseMove = (e: MouseEvent) => {
       :guest-name="guestName"
       @close="showRsvp = false"
     />
+
+    <!-- Ambient YouTube Music Player -->
+    <MusicPlayerV2 :youtube-id="youtubeMusicId" />
   </div>
 </template>
