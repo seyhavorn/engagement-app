@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
+import { useGoogleSheet } from '../composables/useGoogleSheet';
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     guestName: string;
     theme?: 'v1' | 'v2';
@@ -15,6 +16,7 @@ const emit = defineEmits<{
   (e: 'open'): void;
 }>();
 
+const { trackOpen } = useGoogleSheet();
 const isOpen = ref(false);
 
 const lockScroll = () => {
@@ -42,6 +44,7 @@ onUnmounted(() => {
 const handleOpen = () => {
   isOpen.value = true;
   unlockScroll();
+  trackOpen(props.guestName, props.theme);
   emit('open');
 };
 </script>
