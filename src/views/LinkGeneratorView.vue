@@ -22,7 +22,8 @@ const generatedUrl = computed(() => {
 
   let url = `${origin}${path}#/`;
   if (trimmed) {
-    url += `?name=${encodeURIComponent(trimmed)}`;
+    const cleanName = trimmed.replace(/\s+/g, '+');
+    url += `?name=${cleanName}`;
   }
   return url;
 });

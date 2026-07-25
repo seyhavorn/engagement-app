@@ -25,7 +25,8 @@ const generatedUrl = computed(() => {
     window.location.hash.split('?')[0];
   const trimmed = guestNameInput.value.trim();
   if (!trimmed) return baseUrl;
-  return `${baseUrl}?name=${encodeURIComponent(trimmed)}`;
+  const cleanName = trimmed.replace(/\s+/g, '+');
+  return `${baseUrl}?name=${cleanName}`;
 });
 
 const copyLink = () => {
