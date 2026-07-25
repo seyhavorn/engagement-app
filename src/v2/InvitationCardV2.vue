@@ -15,16 +15,22 @@ const selectedPhotoIndex = ref(0);
 const route = useRoute();
 
 const getQueryParam = (key: string): string | null => {
+  let val: string | null = null;
   if (route.query[key] && typeof route.query[key] === 'string') {
-    return route.query[key] as string;
-  }
-  if (window.location.hash.includes('?')) {
+    val = route.query[key] as string;
+  } else if (window.location.hash.includes('?')) {
     const hashParams = new URLSearchParams(window.location.hash.split('?')[1]);
-    const val = hashParams.get(key);
-    if (val) return val;
+    val = hashParams.get(key);
+  } else {
+    const searchParams = new URLSearchParams(window.location.search);
+    val = searchParams.get(key);
   }
-  const searchParams = new URLSearchParams(window.location.search);
-  return searchParams.get(key);
+  if (!val) return null;
+  try {
+    return decodeURIComponent(val.replace(/\+/g, ' '));
+  } catch {
+    return val;
+  }
 };
 
 const guestName = computed(() => getQueryParam('name') || 'សុជាតិ និង​អនាគត');

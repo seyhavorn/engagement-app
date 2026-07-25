@@ -22,12 +22,11 @@ const generatedUrl = computed(() => {
 
   let url = `${origin}${path}#/`;
   if (trimmed) {
-    url += `?name=${encodeURIComponent(trimmed)}`;
+    url += `?name=${trimmed}`;
   }
   return url;
 });
 
-// Clean unescaped URL for clean copy & display
 const cleanUrl = computed(() => {
   return decodeURIComponent(generatedUrl.value);
 });

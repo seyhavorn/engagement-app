@@ -25,14 +25,16 @@ const generatedUrl = computed(() => {
     window.location.hash.split('?')[0];
   const trimmed = guestNameInput.value.trim();
   if (!trimmed) return baseUrl;
-  return `${baseUrl}?name=${encodeURIComponent(trimmed)}`;
+  return `${baseUrl}?name=${trimmed}`;
+});
+
+const cleanUrl = computed(() => {
+  return decodeURIComponent(generatedUrl.value);
 });
 
 const copyLink = () => {
-  if (!generatedUrl.value) return;
-  const name = guestNameInput.value.trim() || 'ភ្ញៀវកិត្តិយស';
-  const fullTextToCopy = `${generatedUrl.value}\nសូមគោរពអញ្ជើញ ${name} ចូលរួមក្នុងពិធីភ្ជាប់ពាក្យ (វន សីហា & សួង ដាវីត):`;
-  navigator.clipboard.writeText(fullTextToCopy);
+  if (!cleanUrl.value) return;
+  navigator.clipboard.writeText(cleanUrl.value);
   copied.value = true;
   setTimeout(() => (copied.value = false), 2500);
 };
@@ -122,7 +124,7 @@ const copyLink = () => {
               : 'bg-emerald-950/60 border-amber-500/30 text-amber-200'
           "
         >
-          <span class="truncate flex-1">{{ generatedUrl }}</span>
+          <span class="truncate flex-1">{{ cleanUrl }}</span>
         </div>
 
         <!-- Action Buttons -->
