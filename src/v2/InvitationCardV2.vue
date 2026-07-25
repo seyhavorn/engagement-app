@@ -46,8 +46,8 @@ const googleMapsUrl = 'https://maps.app.goo.gl/ArXiX3o1sq2NTui99';
 
 // ── Couple Photo Collection ──
 const coupleImages = [
-  `/images/couple_1.JPG`,
-  `/images/couple_2.JPG`,
+  `/images/couple_1.png`,
+  `/images/couple_2.png`,
   `/images/couple_3.JPG`,
   `/images/couple_4.JPG`,
   `/images/couple_5.JPG`,
@@ -56,7 +56,6 @@ const coupleImages = [
   `/images/couple_8.JPG`,
   `/images/couple_9.JPG`,
   `/images/couple_10.JPG`,
-  `/images/couple_11.JPG`,
 ];
 
 const activeImageIndex = ref(0);
@@ -106,23 +105,30 @@ const stopGalleryAutoplay = () => {
   }
 };
 
+const galleryCardRef = ref<HTMLElement | null>(null);
+
 let observer: IntersectionObserver | undefined;
 
 onMounted(() => {
-  startGalleryAutoplay();
-
   observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('is-revealed');
+          if (entry.target === galleryCardRef.value) {
+            startGalleryAutoplay();
+          }
+        } else {
+          if (entry.target === galleryCardRef.value) {
+            stopGalleryAutoplay();
+          }
         }
       });
     },
     {
-      threshold: 0.08,
+      threshold: 0.15,
       rootMargin: '0px 0px -40px 0px',
-    }
+    },
   );
 
   document.querySelectorAll('.reveal-on-scroll').forEach((el) => {
@@ -142,7 +148,10 @@ import OpenEnvelopeModal from '../components/OpenEnvelopeModal.vue';
 const musicPlayerRef = ref<any>(null);
 
 const onOpenEnvelope = () => {
-  if (musicPlayerRef.value && typeof musicPlayerRef.value.playMusic === 'function') {
+  if (
+    musicPlayerRef.value &&
+    typeof musicPlayerRef.value.playMusic === 'function'
+  ) {
     musicPlayerRef.value.playMusic();
   }
 };
@@ -162,7 +171,11 @@ const copyAddress = () => {
     style="overflow-y: auto; -webkit-overflow-scrolling: touch"
   >
     <!-- Interactive Ceremonial Open Envelope Modal -->
-    <OpenEnvelopeModal :guest-name="guestName" theme="v2" @open="onOpenEnvelope" />
+    <OpenEnvelopeModal
+      :guest-name="guestName"
+      theme="v2"
+      @open="onOpenEnvelope"
+    />
     <!-- Royal Emerald Silk Background Texture with Gold Shimmer -->
     <div
       class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 mix-blend-overlay pointer-events-none"
@@ -435,14 +448,13 @@ const copyAddress = () => {
 
     <!-- ─── DESIGN V2 GALLERY CARD ─── -->
     <div
+      ref="galleryCardRef"
       class="relative z-10 w-full max-w-[430px] mx-auto bg-gradient-to-b from-[#12241C]/95 via-[#0D1C15]/95 to-[#08140E]/95 backdrop-blur-xl rounded-[28px] sm:rounded-[36px] shadow-[0_20px_80px_rgba(0,0,0,0.8),0_0_40px_rgba(245,158,11,0.15)] border-2 border-amber-500/40 overflow-hidden reveal-on-scroll"
     >
       <div class="relative z-10 px-6 py-8 sm:px-10 sm:py-11 text-center">
         <!-- Section Header -->
         <div class="mb-5">
-          <h2
-            class="font-heading text-xl text-amber-200 font-semibold"
-          >
+          <h2 class="font-heading text-xl text-amber-200 font-semibold">
             រូបភាពអនុស្សាវរីយ៍
           </h2>
           <div
@@ -548,9 +560,7 @@ const copyAddress = () => {
       <div class="relative z-10 px-6 py-8 sm:px-10 sm:py-11 text-center">
         <!-- Title -->
         <div class="mb-5">
-          <h2
-            class="font-heading text-xl text-amber-200 font-semibold"
-          >
+          <h2 class="font-heading text-xl text-amber-200 font-semibold">
             ទីតាំងកម្មវិធី
           </h2>
           <div
@@ -628,11 +638,11 @@ const copyAddress = () => {
 
     <!-- Developer Footer Credit -->
     <div class="relative z-10 mt-2 mb-6 text-center select-none">
-      <p
-        class="font-body text-xs text-amber-200/50 tracking-wider"
-      >
+      <p class="font-body text-xs text-amber-200/50 tracking-wider">
         រៀបចំ និងរចនាដោយ
-        <span class="font-semibold text-amber-300">VORN Seyha (Lead Software Engineer)</span>
+        <span class="font-semibold text-amber-300"
+          >VORN Seyha (Lead Software Engineer)</span
+        >
       </p>
     </div>
 
@@ -651,6 +661,10 @@ const copyAddress = () => {
       @close="showLightbox = false"
     />
 
-    <MusicPlayerV2 ref="musicPlayerRef" :youtube-id="youtubeMusicId" theme="v2" />
+    <MusicPlayerV2
+      ref="musicPlayerRef"
+      :youtube-id="youtubeMusicId"
+      theme="v2"
+    />
   </div>
 </template>

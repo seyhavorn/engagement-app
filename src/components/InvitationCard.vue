@@ -63,8 +63,8 @@ const googleMapsUrl = 'https://maps.app.goo.gl/pZACuQjEsbPy44hv5';
 // ── Gallery State ──
 const activeImageIndex = ref(0);
 const coupleImages = [
-  `/images/couple_1.JPG`,
-  `/images/couple_2.JPG`,
+  `/images/couple_1.png`,
+  `/images/couple_2.png`,
   `/images/couple_3.JPG`,
   `/images/couple_4.JPG`,
   `/images/couple_5.JPG`,
@@ -73,7 +73,6 @@ const coupleImages = [
   `/images/couple_8.JPG`,
   `/images/couple_9.JPG`,
   `/images/couple_10.JPG`,
-  `/images/couple_11.JPG`,
 ];
 
 const carouselContainer = ref<HTMLElement | null>(null);
@@ -154,21 +153,28 @@ const stopGalleryAutoplay = () => {
   }
 };
 
+const galleryCardRef = ref<HTMLElement | null>(null);
+
 let observer: IntersectionObserver | undefined;
 
 onMounted(() => {
-  startGalleryAutoplay();
-
   observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('is-revealed');
+          if (entry.target === galleryCardRef.value) {
+            startGalleryAutoplay();
+          }
+        } else {
+          if (entry.target === galleryCardRef.value) {
+            stopGalleryAutoplay();
+          }
         }
       });
     },
     {
-      threshold: 0.08,
+      threshold: 0.15,
       rootMargin: '0px 0px -40px 0px',
     }
   );
@@ -808,6 +814,7 @@ onUnmounted(() => {
 
     <!-- ─── Gallery Card ─── -->
     <div
+      ref="galleryCardRef"
       class="relative z-10 w-full max-w-[430px] mx-auto bg-[#FFFDF8]/95 backdrop-blur-md rounded-[28px] sm:rounded-[36px] shadow-[0_12px_60px_rgba(197,160,70,0.12),0_4px_25px_rgba(0,0,0,0.04)] border-2 border-secondary/30 overflow-hidden reveal-on-scroll"
     >
       <!-- Double Inner Border Frame Layer 1 -->
