@@ -25,16 +25,12 @@ const generatedUrl = computed(() => {
     window.location.hash.split('?')[0];
   const trimmed = guestNameInput.value.trim();
   if (!trimmed) return baseUrl;
-  return `${baseUrl}?name=${trimmed}`;
-});
-
-const cleanUrl = computed(() => {
-  return decodeURIComponent(generatedUrl.value);
+  return `${baseUrl}?name=${encodeURIComponent(trimmed)}`;
 });
 
 const copyLink = () => {
-  if (!cleanUrl.value) return;
-  navigator.clipboard.writeText(cleanUrl.value);
+  if (!generatedUrl.value) return;
+  navigator.clipboard.writeText(generatedUrl.value);
   copied.value = true;
   setTimeout(() => (copied.value = false), 2500);
 };
@@ -124,7 +120,7 @@ const copyLink = () => {
               : 'bg-emerald-950/60 border-amber-500/30 text-amber-200'
           "
         >
-          <span class="truncate flex-1">{{ cleanUrl }}</span>
+          <span class="truncate flex-1">{{ generatedUrl }}</span>
         </div>
 
         <!-- Action Buttons -->

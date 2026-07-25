@@ -22,23 +22,19 @@ const generatedUrl = computed(() => {
 
   let url = `${origin}${path}#/`;
   if (trimmed) {
-    url += `?name=${trimmed}`;
+    url += `?name=${encodeURIComponent(trimmed)}`;
   }
   return url;
 });
 
-const cleanUrl = computed(() => {
-  return decodeURIComponent(generatedUrl.value);
-});
-
 const copyLink = () => {
-  navigator.clipboard.writeText(cleanUrl.value);
+  navigator.clipboard.writeText(generatedUrl.value);
   copied.value = true;
   setTimeout(() => (copied.value = false), 2500);
 };
 
 const openPreview = () => {
-  window.open(cleanUrl.value, '_blank');
+  window.open(generatedUrl.value, '_blank');
 };
 </script>
 
@@ -157,7 +153,7 @@ const openPreview = () => {
           <div
             class="p-3.5 rounded-xl bg-white/90 border border-secondary/30 text-xs font-mono text-secondary-dark break-all select-text shadow-xs"
           >
-            {{ cleanUrl }}
+            {{ generatedUrl }}
           </div>
         </div>
 
