@@ -48,7 +48,7 @@ const venueAddress = 'ឃុំចម្ប៉ា ស្រុកព្រៃក
 const invitationMessage =
   'បេះដូងពីរ ស្នេហាមួយ ការចាប់ផ្តើមដ៏ស្រស់ស្អាតមួយ។ យើងខ្ញុំសូមអញ្ជើញលោក លោកស្រី អ្នកនាង កញ្ញា មកចូលរួមអបអរសាទរក្នុងពិធីភ្ជាប់ពាក្យរបស់យើងខ្ញុំ ដើម្បីជាសាក្សីនៃការចាប់ផ្តើមនៃស្នេហាដ៏អស់កល្បរបស់យើង។';
 const countdownTarget = '2026-08-22T08:00:00';
-const googleMapsUrl = 'https://maps.app.goo.gl/ArXiX3o1sq2NTui99';
+const googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query=11.164417,104.904918';
 
 // ── Couple Photo Collection ──
 const coupleImages = [
