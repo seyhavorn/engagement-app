@@ -99,28 +99,74 @@ input, textarea, select {
 /* ── Luxury Scroll Reveal Animations ────────────────────────────── */
 .reveal-on-scroll {
   opacity: 0;
-  transform: translateY(40px) scale(0.96) rotateX(6deg);
-  filter: blur(4px);
-  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), 
-              transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), 
-              filter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform, filter;
+  transform: translate3d(0, 30px, 0) scale(0.98);
+  filter: blur(3px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), 
+              filter 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .reveal-on-scroll.is-revealed {
   opacity: 1;
-  transform: translateY(0) scale(1) rotateX(0deg);
+  transform: translate3d(0, 0, 0) scale(1);
   filter: blur(0px);
 }
 
-.fade-in-delay-1 { animation-delay: 0.2s; }
-.fade-in-delay-2 { animation-delay: 0.4s; }
-.fade-in-delay-3 { animation-delay: 0.6s; }
-.fade-in-delay-4 { animation-delay: 0.8s; }
-.fade-in-delay-5 { animation-delay: 1.0s; }
-.fade-in-delay-6 { animation-delay: 1.2s; }
-.fade-in-delay-7 { animation-delay: 1.4s; }
-.fade-in-delay-8 { animation-delay: 1.6s; }
+/* ── Low-Performance / Mobile Scroll Optimizations ─────────────── */
+@media (max-width: 768px) {
+  /* Use lightweight 2D GPU acceleration on mobile screens to save CPU */
+  .reveal-on-scroll {
+    transform: translate3d(0, 20px, 0);
+    filter: none !important;
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  }
+
+  .reveal-on-scroll.is-revealed {
+    transform: translate3d(0, 0, 0);
+  }
+
+  /* Disable heavy realtime backdrop blurs on mobile GPU for butter-smooth 60fps scroll */
+  .backdrop-blur-xl,
+  .backdrop-blur-lg,
+  .backdrop-blur-md,
+  .backdrop-blur-sm {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+/* Honor Low Power / Reduced Motion Settings */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+  .fade-in-up,
+  .fade-in {
+    animation: none !important;
+  }
+}
+
+.fade-in-delay-1 { animation-delay: 0.15s; }
+.fade-in-delay-2 { animation-delay: 0.3s; }
+.fade-in-delay-3 { animation-delay: 0.45s; }
+.fade-in-delay-4 { animation-delay: 0.6s; }
+.fade-in-delay-5 { animation-delay: 0.75s; }
+.fade-in-delay-6 { animation-delay: 0.9s; }
+.fade-in-delay-7 { animation-delay: 1.05s; }
+.fade-in-delay-8 { animation-delay: 1.2s; }
+
+/* ── Hardware Acceleration & Layer Containment ────────────────── */
+.gpu-accelerate {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
 
 /* ── Gold Shimmer Text ───────────────────────────────── */
 .gold-shimmer {

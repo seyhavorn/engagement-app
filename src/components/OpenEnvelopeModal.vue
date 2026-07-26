@@ -44,7 +44,11 @@ onUnmounted(() => {
 const handleOpen = () => {
   isOpen.value = true;
   unlockScroll();
-  trackOpen(props.guestName, props.theme);
+  try {
+    trackOpen(props.guestName, props.theme);
+  } catch (err) {
+    console.warn('[OpenEnvelopeModal] Tracking error:', err);
+  }
   emit('open');
 };
 </script>

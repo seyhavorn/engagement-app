@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import CountdownTimer from './CountdownTimer.vue';
 import EventSchedule from './EventSchedule.vue';
@@ -18,35 +18,58 @@ const openLightbox = (index: number) => {
   showLightbox.value = true;
 };
 
+const isEnvelopeOpened = ref(false);
+
+const initScrollObserver = () => {
+  if (typeof IntersectionObserver !== 'undefined') {
+    observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+          }
+        });
+      },
+      {
+        threshold: 0.05,
+        rootMargin: '0px 0px -20px 0px',
+      }
+    );
+
+    document.querySelectorAll('.reveal-on-scroll').forEach((el) => {
+      observer?.observe(el);
+    });
+  }
+};
+
 const onOpenEnvelope = () => {
+  isEnvelopeOpened.value = true;
   if (
     musicPlayerRef.value &&
     typeof musicPlayerRef.value.playMusic === 'function'
   ) {
     musicPlayerRef.value.playMusic();
   }
+  nextTick(() => {
+    startGalleryAutoplay();
+    initScrollObserver();
+  });
 };
 
 // ── ឈ្មោះភ្ញៀវពី URL (e.g. ?name=សុជាតិ) ──
 const route = useRoute();
 
 const getQueryParam = (key: string): string | null => {
-  let val: string | null = null;
   if (route.query[key] && typeof route.query[key] === 'string') {
-    val = route.query[key] as string;
-  } else if (window.location.hash.includes('?')) {
+    return route.query[key] as string;
+  }
+  if (window.location.hash.includes('?')) {
     const hashParams = new URLSearchParams(window.location.hash.split('?')[1]);
-    val = hashParams.get(key);
-  } else {
-    const searchParams = new URLSearchParams(window.location.search);
-    val = searchParams.get(key);
+    const val = hashParams.get(key);
+    if (val) return val;
   }
-  if (!val) return null;
-  try {
-    return decodeURIComponent(val.replace(/\+/g, ' '));
-  } catch {
-    return val;
-  }
+  const searchParams = new URLSearchParams(window.location.search);
+  return searchParams.get(key);
 };
 
 const guestName = computed(() => getQueryParam('name') || 'សុជាតិ និង​អនាគត');
@@ -64,7 +87,7 @@ const venueAddress = 'ភូមិឬស្សីថ្មី ឃុំចំប
 const invitationMessage =
   'បេះដូងពីរ ស្នេហាមួយ ការចាប់ផ្តើមដ៏ស្រស់ស្អាតមួយ។ យើងខ្ញុំសូមអញ្ជើញលោក លោកស្រី អ្នកនាង កញ្ញា មកចូលរួមអបអរសាទរក្នុងពិធីភ្ជាប់ពាក្យរបស់យើងខ្ញុំ ដើម្បីជាសាក្សីនៃការចាប់ផ្តើមនៃស្នេហាដ៏អស់កល្បរបស់យើង។';
 const countdownTarget = '2026-08-22T08:00:00';
-const googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query=11.164417,104.904918';
+const googleMapsUrl = 'https://maps.app.goo.gl/pZACuQjEsbPy44hv5';
 
 // ── Gallery State ──
 const activeImageIndex = ref(0);
@@ -159,35 +182,13 @@ const stopGalleryAutoplay = () => {
   }
 };
 
-const galleryCardRef = ref<HTMLElement | null>(null);
-
 let observer: IntersectionObserver | undefined;
 
 onMounted(() => {
-  observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-revealed');
-          if (entry.target === galleryCardRef.value) {
-            startGalleryAutoplay();
-          }
-        } else {
-          if (entry.target === galleryCardRef.value) {
-            stopGalleryAutoplay();
-          }
-        }
-      });
-    },
-    {
-      threshold: 0.15,
-      rootMargin: '0px 0px -40px 0px',
-    }
-  );
-
-  document.querySelectorAll('.reveal-on-scroll').forEach((el) => {
-    observer?.observe(el);
-  });
+  if (isEnvelopeOpened.value) {
+    startGalleryAutoplay();
+    initScrollObserver();
+  }
 });
 
 onUnmounted(() => {
@@ -203,22 +204,36 @@ onUnmounted(() => {
     class="relative min-h-screen min-h-[100dvh] w-full flex flex-col items-center justify-start overflow-x-hidden py-8 px-3 sm:py-12 sm:px-6 gap-8 sm:gap-12"
     style="overflow-y: auto; -webkit-overflow-scrolling: touch"
   >
-    <!-- Interactive Ceremonial Open Envelope Modal -->
-    <OpenEnvelopeModal :guest-name="guestName" @open="onOpenEnvelope" />
-    <!-- Background Image with Soft Texture -->
-    <div
-      class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 opacity-60"
-      :style="{
-        backgroundImage: `url(/bg-silk.png)`,
-      }"
+    <!-- Ambient YouTube Music Player (Always Mounted for Instant Playback) -->
+    <MusicPlayerV2
+      ref="musicPlayerRef"
+      :youtube-id="youtubeMusicId"
+      theme="v1"
     />
-    <!-- Light Ivory overlay -->
-    <div class="absolute inset-0 bg-[#FFFDF8]/70 backdrop-blur-[2px]" />
 
-    <!-- ─── Invitation Card ─── -->
-    <div
-      class="relative z-10 w-full max-w-[430px] mx-auto my-auto bg-[#FFFDF8]/95 backdrop-blur-md rounded-[28px] sm:rounded-[36px] shadow-[0_12px_60px_rgba(197,160,70,0.12),0_4px_25px_rgba(0,0,0,0.04)] border-2 border-secondary/30 overflow-hidden fade-in-up"
-    >
+    <!-- Page 1: Interactive Ceremonial Open Envelope Landing View -->
+    <OpenEnvelopeModal
+      v-if="!isEnvelopeOpened"
+      :guest-name="guestName"
+      @open="onOpenEnvelope"
+    />
+
+    <!-- Page 2: Main Invitation Card View — Mounts & Animates LIVE when Opened! -->
+    <template v-else>
+      <!-- Background Image with Soft Texture -->
+      <div
+        class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 opacity-60"
+        :style="{
+          backgroundImage: `url(/bg-silk.png)`,
+        }"
+      />
+      <!-- Light Ivory overlay -->
+      <div class="absolute inset-0 bg-[#FFFDF8]/70 backdrop-blur-[2px]" />
+
+      <!-- ─── Invitation Card ─── -->
+      <div
+        class="relative z-10 w-full max-w-[430px] mx-auto my-auto bg-[#FFFDF8]/95 backdrop-blur-md rounded-[28px] sm:rounded-[36px] shadow-[0_12px_60px_rgba(197,160,70,0.12),0_4px_25px_rgba(0,0,0,0.04)] border-2 border-secondary/30 overflow-hidden fade-in-up"
+      >
       <!-- Top Right Golden Floral Corner Ornament -->
       <svg
         class="absolute top-0 right-0 w-32 sm:w-44 h-32 sm:h-44 text-secondary pointer-events-none z-20 opacity-80 select-none"
@@ -820,7 +835,6 @@ onUnmounted(() => {
 
     <!-- ─── Gallery Card ─── -->
     <div
-      ref="galleryCardRef"
       class="relative z-10 w-full max-w-[430px] mx-auto bg-[#FFFDF8]/95 backdrop-blur-md rounded-[28px] sm:rounded-[36px] shadow-[0_12px_60px_rgba(197,160,70,0.12),0_4px_25px_rgba(0,0,0,0.04)] border-2 border-secondary/30 overflow-hidden reveal-on-scroll"
     >
       <!-- Double Inner Border Frame Layer 1 -->
@@ -1117,12 +1131,6 @@ onUnmounted(() => {
       :initial-index="selectedPhotoIndex"
       @close="showLightbox = false"
     />
-
-    <!-- Ambient YouTube Music Player -->
-    <MusicPlayerV2
-      ref="musicPlayerRef"
-      :youtube-id="youtubeMusicId"
-      theme="v1"
-    />
+    </template>
   </div>
 </template>

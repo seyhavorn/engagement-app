@@ -11,9 +11,6 @@ const DEFAULT_SHEET_URL =
 
 const SHEET_URL = import.meta.env.VITE_GOOGLE_SHEET_URL || DEFAULT_SHEET_URL;
 
-/** Prevent duplicate sends within the same session */
-let hasSent = false;
-
 function getDeviceInfo(): string {
   const ua = navigator.userAgent;
   if (/iPad/i.test(ua)) return 'iPad';
@@ -49,14 +46,33 @@ function formatDate(date: Date): string {
   );
 }
 
+function isLocalEnvironment(): boolean {
+  if (import.meta.env.DEV) return true;
+  const host = window.location.hostname;
+  return (
+    host === 'localhost' ||
+    host === '127.0.0.1' ||
+    host.startsWith('192.168.') ||
+    host.startsWith('10.') ||
+    host.endsWith('.local')
+  );
+}
+
 export function useGoogleSheet() {
   /**
    * Track an envelope open event using Google Apps Script Web App endpoint.
-   * Sends EXACTLY ONE POST request per session to prevent duplicate rows.
+   * Only saves in PRODUCTION environment. Skips tracking on localhost / dev mode.
    */
   const trackOpen = (guestName: string, theme: 'v1' | 'v2' = 'v1') => {
-    if (!SHEET_URL || hasSent) return;
-    hasSent = true;
+    if (!SHEET_URL) return;
+
+    if (isLocalEnvironment()) {
+      console.log(
+        '[GoogleSheet Tracker] Local environment detected — skipping save for:',
+        guestName
+      );
+      return;
+    }
 
     const payload: Record<string, string> = {
       guestName,
@@ -78,11 +94,11 @@ export function useGoogleSheet() {
         },
         body: jsonText,
         keepalive: true,
-      }).catch(() => {
-        hasSent = false;
+      }).catch((err) => {
+        console.warn('[GoogleSheet Tracker] Send warning:', err);
       });
-    } catch {
-      hasSent = false;
+    } catch (err) {
+      console.warn('[GoogleSheet Tracker] Error:', err);
     }
   };
 

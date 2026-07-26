@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import CountdownTimerV2 from './components/CountdownTimerV2.vue';
 import EventScheduleV2 from './components/EventScheduleV2.vue';
@@ -15,22 +15,16 @@ const selectedPhotoIndex = ref(0);
 const route = useRoute();
 
 const getQueryParam = (key: string): string | null => {
-  let val: string | null = null;
   if (route.query[key] && typeof route.query[key] === 'string') {
-    val = route.query[key] as string;
-  } else if (window.location.hash.includes('?')) {
+    return route.query[key] as string;
+  }
+  if (window.location.hash.includes('?')) {
     const hashParams = new URLSearchParams(window.location.hash.split('?')[1]);
-    val = hashParams.get(key);
-  } else {
-    const searchParams = new URLSearchParams(window.location.search);
-    val = searchParams.get(key);
+    const val = hashParams.get(key);
+    if (val) return val;
   }
-  if (!val) return null;
-  try {
-    return decodeURIComponent(val.replace(/\+/g, ' '));
-  } catch {
-    return val;
-  }
+  const searchParams = new URLSearchParams(window.location.search);
+  return searchParams.get(key);
 };
 
 const guestName = computed(() => getQueryParam('name') || 'សុជាតិ និង​អនាគត');
@@ -48,7 +42,7 @@ const venueAddress = 'ឃុំចម្ប៉ា ស្រុកព្រៃក
 const invitationMessage =
   'បេះដូងពីរ ស្នេហាមួយ ការចាប់ផ្តើមដ៏ស្រស់ស្អាតមួយ។ យើងខ្ញុំសូមអញ្ជើញលោក លោកស្រី អ្នកនាង កញ្ញា មកចូលរួមអបអរសាទរក្នុងពិធីភ្ជាប់ពាក្យរបស់យើងខ្ញុំ ដើម្បីជាសាក្សីនៃការចាប់ផ្តើមនៃស្នេហាដ៏អស់កល្បរបស់យើង។';
 const countdownTarget = '2026-08-22T08:00:00';
-const googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query=11.164417,104.904918';
+const googleMapsUrl = 'https://maps.app.goo.gl/ArXiX3o1sq2NTui99';
 
 // ── Couple Photo Collection ──
 const coupleImages = [
@@ -111,35 +105,37 @@ const stopGalleryAutoplay = () => {
   }
 };
 
-const galleryCardRef = ref<HTMLElement | null>(null);
-
 let observer: IntersectionObserver | undefined;
 
-onMounted(() => {
-  observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-revealed');
-          if (entry.target === galleryCardRef.value) {
-            startGalleryAutoplay();
-          }
-        } else {
-          if (entry.target === galleryCardRef.value) {
-            stopGalleryAutoplay();
-          }
-        }
-      });
-    },
-    {
-      threshold: 0.15,
-      rootMargin: '0px 0px -40px 0px',
-    },
-  );
+const isEnvelopeOpened = ref(false);
 
-  document.querySelectorAll('.reveal-on-scroll').forEach((el) => {
-    observer?.observe(el);
-  });
+const initScrollObserver = () => {
+  if (typeof IntersectionObserver !== 'undefined') {
+    observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+          }
+        });
+      },
+      {
+        threshold: 0.05,
+        rootMargin: '0px 0px -20px 0px',
+      }
+    );
+
+    document.querySelectorAll('.reveal-on-scroll').forEach((el) => {
+      observer?.observe(el);
+    });
+  }
+};
+
+onMounted(() => {
+  if (isEnvelopeOpened.value) {
+    startGalleryAutoplay();
+    initScrollObserver();
+  }
 });
 
 onUnmounted(() => {
@@ -154,12 +150,17 @@ import OpenEnvelopeModal from '../components/OpenEnvelopeModal.vue';
 const musicPlayerRef = ref<any>(null);
 
 const onOpenEnvelope = () => {
+  isEnvelopeOpened.value = true;
   if (
     musicPlayerRef.value &&
     typeof musicPlayerRef.value.playMusic === 'function'
   ) {
     musicPlayerRef.value.playMusic();
   }
+  nextTick(() => {
+    startGalleryAutoplay();
+    initScrollObserver();
+  });
 };
 
 // Copy Address feedback
@@ -176,17 +177,28 @@ const copyAddress = () => {
     class="relative min-h-screen min-h-[100dvh] w-full flex flex-col items-center justify-start overflow-x-hidden py-8 px-3 sm:py-12 sm:px-6 gap-8 sm:gap-12 bg-[#09140E]"
     style="overflow-y: auto; -webkit-overflow-scrolling: touch"
   >
-    <!-- Interactive Ceremonial Open Envelope Modal -->
+    <!-- Ambient YouTube Music Player (Always Mounted for Instant Playback) -->
+    <MusicPlayerV2
+      ref="musicPlayerRef"
+      :youtube-id="youtubeMusicId"
+      theme="v2"
+    />
+
+    <!-- Page 1: Interactive Ceremonial Open Envelope Landing View -->
     <OpenEnvelopeModal
+      v-if="!isEnvelopeOpened"
       :guest-name="guestName"
       theme="v2"
       @open="onOpenEnvelope"
     />
-    <!-- Royal Emerald Silk Background Texture with Gold Shimmer -->
-    <div
-      class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 mix-blend-overlay pointer-events-none"
-      style="background-image: url('/bg-silk.png')"
-    />
+
+    <!-- Page 2: Main Invitation Card View — Mounts & Animates LIVE when Opened! -->
+    <template v-else>
+      <!-- Royal Emerald Silk Background Texture with Gold Shimmer -->
+      <div
+        class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 mix-blend-overlay pointer-events-none"
+        style="background-image: url('/bg-silk.png')"
+      />
     <!-- Emerald Radial Glow Overlay -->
     <div
       class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-900/40 via-[#0B1A13]/90 to-[#050C08] pointer-events-none"
@@ -454,7 +466,6 @@ const copyAddress = () => {
 
     <!-- ─── DESIGN V2 GALLERY CARD ─── -->
     <div
-      ref="galleryCardRef"
       class="relative z-10 w-full max-w-[430px] mx-auto bg-gradient-to-b from-[#12241C]/95 via-[#0D1C15]/95 to-[#08140E]/95 backdrop-blur-xl rounded-[28px] sm:rounded-[36px] shadow-[0_20px_80px_rgba(0,0,0,0.8),0_0_40px_rgba(245,158,11,0.15)] border-2 border-amber-500/40 overflow-hidden reveal-on-scroll"
     >
       <div class="relative z-10 px-6 py-8 sm:px-10 sm:py-11 text-center">
@@ -666,11 +677,6 @@ const copyAddress = () => {
       theme="v2"
       @close="showLightbox = false"
     />
-
-    <MusicPlayerV2
-      ref="musicPlayerRef"
-      :youtube-id="youtubeMusicId"
-      theme="v2"
-    />
+    </template>
   </div>
 </template>
