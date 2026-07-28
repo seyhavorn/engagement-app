@@ -20,6 +20,32 @@ const openLightbox = (index: number) => {
 
 const isEnvelopeOpened = ref(false);
 
+let galleryObserver: IntersectionObserver | undefined;
+
+const initGalleryObserver = () => {
+  if (typeof IntersectionObserver !== 'undefined' && carouselContainer.value) {
+    if (galleryObserver) {
+      galleryObserver.disconnect();
+    }
+    galleryObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            startGalleryAutoplay();
+          } else {
+            stopGalleryAutoplay();
+          }
+        });
+      },
+      {
+        threshold: 0.15,
+      }
+    );
+
+    galleryObserver.observe(carouselContainer.value);
+  }
+};
+
 const initScrollObserver = () => {
   if (typeof IntersectionObserver !== 'undefined') {
     observer = new IntersectionObserver(
@@ -51,8 +77,8 @@ const onOpenEnvelope = () => {
     musicPlayerRef.value.playMusic();
   }
   nextTick(() => {
-    startGalleryAutoplay();
     initScrollObserver();
+    initGalleryObserver();
   });
 };
 
@@ -186,8 +212,8 @@ let observer: IntersectionObserver | undefined;
 
 onMounted(() => {
   if (isEnvelopeOpened.value) {
-    startGalleryAutoplay();
     initScrollObserver();
+    initGalleryObserver();
   }
 });
 
@@ -195,6 +221,9 @@ onUnmounted(() => {
   stopGalleryAutoplay();
   if (observer) {
     observer.disconnect();
+  }
+  if (galleryObserver) {
+    galleryObserver.disconnect();
   }
 });
 </script>

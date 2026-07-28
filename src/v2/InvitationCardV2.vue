@@ -106,8 +106,33 @@ const stopGalleryAutoplay = () => {
 };
 
 let observer: IntersectionObserver | undefined;
+let galleryObserver: IntersectionObserver | undefined;
 
 const isEnvelopeOpened = ref(false);
+
+const initGalleryObserver = () => {
+  if (typeof IntersectionObserver !== 'undefined' && carouselContainer.value) {
+    if (galleryObserver) {
+      galleryObserver.disconnect();
+    }
+    galleryObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            startGalleryAutoplay();
+          } else {
+            stopGalleryAutoplay();
+          }
+        });
+      },
+      {
+        threshold: 0.15,
+      }
+    );
+
+    galleryObserver.observe(carouselContainer.value);
+  }
+};
 
 const initScrollObserver = () => {
   if (typeof IntersectionObserver !== 'undefined') {
@@ -133,8 +158,8 @@ const initScrollObserver = () => {
 
 onMounted(() => {
   if (isEnvelopeOpened.value) {
-    startGalleryAutoplay();
     initScrollObserver();
+    initGalleryObserver();
   }
 });
 
@@ -142,6 +167,9 @@ onUnmounted(() => {
   stopGalleryAutoplay();
   if (observer) {
     observer.disconnect();
+  }
+  if (galleryObserver) {
+    galleryObserver.disconnect();
   }
 });
 
@@ -158,8 +186,8 @@ const onOpenEnvelope = () => {
     musicPlayerRef.value.playMusic();
   }
   nextTick(() => {
-    startGalleryAutoplay();
     initScrollObserver();
+    initGalleryObserver();
   });
 };
 
