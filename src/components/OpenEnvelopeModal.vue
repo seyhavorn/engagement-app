@@ -288,7 +288,7 @@ const handleOpen = () => {
               សូមគោរពអញ្ជើញ
             </p>
             <h3
-              class="relative z-10 font-heading text-lg font-bold tracking-wide leading-snug"
+              class="relative z-10 font-heading text-lg font-bold tracking-wide leading-relaxed break-words"
               :class="theme === 'v1' ? 'text-secondary-dark' : 'text-amber-100'"
             >
               {{ guestName }}
