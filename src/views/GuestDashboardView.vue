@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue';
-import { useGuestDashboard, type Guest } from '../composables/useGuestDashboard';
+import { ref, computed, onMounted } from 'vue';
+import { useGuestDashboard } from '../composables/useGuestDashboard';
 
 const {
   guests,
