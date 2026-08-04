@@ -7,7 +7,7 @@
  */
 
 const DEFAULT_SHEET_URL =
-  'https://script.google.com/macros/s/AKfycbxwIohq7JgW_zqDF9Iea2e1zI8ix9gkuv39uubnLDorDm24YQJDWml3Phl8NNsQTV87/exec';
+  'https://script.google.com/macros/s/AKfycbzSdqTOFn2p-yXer6BKuuA03XrYD6MllrzWEPXMM_9IiuMuaoebbx3q9Ga8iccGaa1adw/exec';
 
 const SHEET_URL = import.meta.env.VITE_GOOGLE_SHEET_URL || DEFAULT_SHEET_URL;
 

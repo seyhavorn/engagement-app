@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import DesignV1View from '../views/DesignV1View.vue';
 import DesignV2View from '../views/DesignV2View.vue';
 import LinkGeneratorView from '../views/LinkGeneratorView.vue';
+import GuestDashboardView from '../views/GuestDashboardView.vue';
 
 // Use WebHashHistory or WebHistory for flexible deployment across subpaths
 const router = createRouter({
@@ -36,6 +37,11 @@ const router = createRouter({
       path: '/admin',
       name: 'link-generator-admin',
       component: LinkGeneratorView,
+    },
+    {
+      path: '/dashboard',
+      name: 'guest-dashboard',
+      component: GuestDashboardView,
     },
   ],
   scrollBehavior() {
