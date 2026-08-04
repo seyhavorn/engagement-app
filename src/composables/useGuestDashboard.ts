@@ -22,7 +22,7 @@ interface SheetResponse {
 }
 
 const DEFAULT_SHEET_URL =
-  'https://script.google.com/macros/s/AKfycbzSdqTOFn2p-yXer6BKuuA03XrYD6MllrzWEPXMM_9IiuMuaoebbx3q9Ga8iccGaa1adw/exec';
+  'https://script.google.com/macros/s/AKfycbz6gjoARhzuwSpGQ6CV7bNXxRbgYB3qsG0gUmNpOe9UrIl5V2mBmkmmcvg156V_UqMMWg/exec';
 
 const SHEET_URL = import.meta.env.VITE_GOOGLE_SHEET_URL || DEFAULT_SHEET_URL;
 
@@ -55,7 +55,15 @@ export function useGuestDashboard() {
       const json: SheetResponse = await response.json();
 
       if (json.status === 'success') {
-        guests.value = json.data || [];
+        // Map Google Sheet column names (with spaces) to camelCase
+        guests.value = (json.data || []).map((row: any) => ({
+          guestName: row['Guest Name'] || row['guestName'] || '',
+          openedAt: row['Opened At'] || row['openedAt'] || '',
+          theme: row['Theme'] || row['theme'] || '',
+          device: row['Device'] || row['device'] || '',
+          browser: row['Browser'] || row['browser'] || '',
+          pageUrl: row['Page URL'] || row['pageUrl'] || '',
+        }));
         lastFetched.value = new Date();
       } else {
         throw new Error(json.message || 'Failed to fetch guest data.');
@@ -81,12 +89,23 @@ export function useGuestDashboard() {
   });
 
   const todayOpens = computed(() => {
-    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    const today = new Date();
+    const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
     return guests.value.filter((g) => {
       if (!g.openedAt) return false;
-      // Handle format: "2026-08-04 02:30:15 PM" → extract date part
+      // Handle multiple date formats:
+      // 1. "Sat Jul 25 2026 13:34:08 GMT+0700 (...)" — JS Date string
+      // 2. "2026-08-04 02:30:15 PM" — custom format
+      try {
+        const parsed = new Date(g.openedAt);
+        if (!isNaN(parsed.getTime())) {
+          const pStr = `${parsed.getFullYear()}-${String(parsed.getMonth() + 1).padStart(2, '0')}-${String(parsed.getDate()).padStart(2, '0')}`;
+          return pStr === todayStr;
+        }
+      } catch { /* fall through */ }
+      // Fallback: try extracting YYYY-MM-DD from start
       const datePart = g.openedAt.split(' ')[0];
-      return datePart === today;
+      return datePart === todayStr;
     }).length;
   });
 
