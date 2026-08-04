@@ -56,7 +56,7 @@ export function useGuestDashboard() {
 
       if (json.status === 'success') {
         // Map Google Sheet column names (with spaces) to camelCase
-        guests.value = (json.data || []).map((row: any) => ({
+        const allRows: Guest[] = (json.data || []).map((row: any) => ({
           guestName: row['Guest Name'] || row['guestName'] || '',
           openedAt: row['Opened At'] || row['openedAt'] || '',
           theme: row['Theme'] || row['theme'] || '',
@@ -64,6 +64,25 @@ export function useGuestDashboard() {
           browser: row['Browser'] || row['browser'] || '',
           pageUrl: row['Page URL'] || row['pageUrl'] || '',
         }));
+
+        // Deduplicate: keep only the latest entry per unique guest name
+        const uniqueMap = new Map<string, Guest>();
+        for (const row of allRows) {
+          const key = row.guestName.trim();
+          if (!key) continue;
+          const existing = uniqueMap.get(key);
+          if (!existing) {
+            uniqueMap.set(key, row);
+          } else {
+            // Keep the most recent one
+            const existingDate = new Date(existing.openedAt).getTime() || 0;
+            const currentDate = new Date(row.openedAt).getTime() || 0;
+            if (currentDate > existingDate) {
+              uniqueMap.set(key, row);
+            }
+          }
+        }
+        guests.value = Array.from(uniqueMap.values());
         lastFetched.value = new Date();
       } else {
         throw new Error(json.message || 'Failed to fetch guest data.');
