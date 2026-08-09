@@ -224,7 +224,7 @@ const handleOpen = () => {
               class="font-heading text-xl font-bold tracking-wide"
               :class="theme === 'v1' ? 'text-primary' : 'text-amber-200'"
             >
-              ពិធីភ្ជាប់ពាក្យ
+              សិរីមង្គលពិធីភ្ជាប់ពាក្យ
             </h2>
             <!-- Golden Ornament Line -->
             <div class="flex items-center justify-center gap-2 mt-2 opacity-60">
@@ -308,7 +308,7 @@ const handleOpen = () => {
               class="font-body text-[11px] leading-relaxed px-3"
               :class="theme === 'v1' ? 'text-primary/60' : 'text-emerald-100/50'"
             >
-              សូមគោរពអញ្ជើញលោកអ្នកមកចូលរួមអបអរសាទរពិធីភ្ជាប់ពាក្យរបស់យើងខ្ញុំ
+              សូមគោរពអញ្ជើញលោកអ្នកមកចូលរួមអបអរសាទរសិរីមង្គលពិធីភ្ជាប់ពាក្យរបស់យើងខ្ញុំ
             </p>
           </div>
 

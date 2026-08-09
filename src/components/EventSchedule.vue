@@ -11,7 +11,7 @@ const scheduleItems = [
   {
     time: 'ម៉ោង ៨:០០ ព្រឹក',
     timeEn: '08:00 AM',
-    title: 'ពិធីភ្ជាប់ពាក្យចាប់ផ្តើម',
+    title: 'សិរីមង្គលពិធីភ្ជាប់ពាក្យចាប់ផ្តើម',
     titleEn: 'Engagement Ceremony Begins',
     desc: 'ពិធីបំពាក់ចិញ្ចៀនភ្ជាប់ពាក្យ និងប្រកាសជាផ្លូវការ',
     type: 'ring',

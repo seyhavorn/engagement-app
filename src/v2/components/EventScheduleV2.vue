@@ -11,7 +11,7 @@ const scheduleItems = [
   {
     time: 'ម៉ោង ៨:០០ ព្រឹក',
     timeEn: '08:00 AM',
-    title: 'ពិធីភ្ជាប់ពាក្យចាប់ផ្តើម',
+    title: 'សិរីមង្គលពិធីភ្ជាប់ពាក្យចាប់ផ្តើម',
     titleEn: 'Engagement Ceremony Begins',
     desc: 'ពិធីបំពាក់ចិញ្ចៀនភ្ជាប់ពាក្យ និងប្រកាសជាផ្លូវការ',
     type: 'ring',
@@ -29,7 +29,7 @@ const scheduleItems = [
     timeEn: '09:30 AM',
     title: 'ពិធីពិសាអាហារ',
     titleEn: 'Celebration Banquet',
-    desc: 'អញ្ជើញពិសាអាហារសាមគ្គីអបអរសាទរពិធីភ្ជាប់ពាក្យ',
+    desc: 'អញ្ជើញពិសាអាហារសាមគ្គីអបអរសាទរសិរីមង្គលពិធីភ្ជាប់ពាក្យ',
     type: 'banquet',
   },
 ];
