@@ -17,9 +17,11 @@ export interface Guest {
 
 interface SheetResponse {
   status: string;
-  data: Guest[];
+  data: SheetRow[];
   message?: string;
 }
+
+type SheetRow = Record<string, unknown>;
 
 const DEFAULT_SHEET_URL =
   'https://script.google.com/macros/s/AKfycbz6gjoARhzuwSpGQ6CV7bNXxRbgYB3qsG0gUmNpOe9UrIl5V2mBmkmmcvg156V_UqMMWg/exec';
@@ -27,6 +29,7 @@ const DEFAULT_SHEET_URL =
 const SHEET_URL = import.meta.env.VITE_GOOGLE_SHEET_URL || DEFAULT_SHEET_URL;
 
 export function useGuestDashboard() {
+  const openEvents = ref<Guest[]>([]);
   const guests = ref<Guest[]>([]);
   const loading = ref(false);
   const error = ref<string | null>(null);
@@ -56,14 +59,16 @@ export function useGuestDashboard() {
 
       if (json.status === 'success') {
         // Map Google Sheet column names (with spaces) to camelCase
-        const allRows: Guest[] = (json.data || []).map((row: any) => ({
-          guestName: row['Guest Name'] || row['guestName'] || '',
-          openedAt: row['Opened At'] || row['openedAt'] || '',
-          theme: row['Theme'] || row['theme'] || '',
-          device: row['Device'] || row['device'] || '',
-          browser: row['Browser'] || row['browser'] || '',
-          pageUrl: row['Page URL'] || row['pageUrl'] || '',
+        const allRows: Guest[] = (json.data || []).map((row) => ({
+          guestName: String(row['Guest Name'] || row['guestName'] || ''),
+          openedAt: String(row['Opened At'] || row['openedAt'] || ''),
+          theme: String(row['Theme'] || row['theme'] || ''),
+          device: String(row['Device'] || row['device'] || ''),
+          browser: String(row['Browser'] || row['browser'] || ''),
+          pageUrl: String(row['Page URL'] || row['pageUrl'] || ''),
         }));
+
+        openEvents.value = allRows;
 
         // Deduplicate: keep only the latest entry per unique guest name
         const uniqueMap = new Map<string, Guest>();
@@ -96,7 +101,7 @@ export function useGuestDashboard() {
   };
 
   // ── Computed Stats ───────────────────────────────────────
-  const totalOpens = computed(() => guests.value.length);
+  const totalOpens = computed(() => openEvents.value.length);
 
   const uniqueGuests = computed(() => {
     const names = new Set(
@@ -110,7 +115,7 @@ export function useGuestDashboard() {
   const todayOpens = computed(() => {
     const today = new Date();
     const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-    return guests.value.filter((g) => {
+    return openEvents.value.filter((g) => {
       if (!g.openedAt) return false;
       // Handle multiple date formats:
       // 1. "Sat Jul 25 2026 13:34:08 GMT+0700 (...)" — JS Date string

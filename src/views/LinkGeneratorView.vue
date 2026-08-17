@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 
 const guestNameInput = ref('');
+const targetPage = ref<'v1' | 'v2' | 'countdown'>('v1');
 const copied = ref(false);
 
 const presetNames = [
@@ -20,18 +21,28 @@ const generatedUrl = computed(() => {
   const path = window.location.pathname;
   const trimmed = guestNameInput.value.trim();
 
-  let url = `${origin}${path}#/`;
+  let basePath = '#/';
+  if (targetPage.value === 'v2') {
+    basePath = '#/v2';
+  } else if (targetPage.value === 'countdown') {
+    basePath = '#/countdown';
+  }
+
+  let url = `${origin}${path}${basePath}`;
   if (trimmed) {
-    const cleanName = trimmed.replace(/\s+/g, '+');
-    url += `?name=${cleanName}`;
+    url += `?name=${encodeURIComponent(trimmed)}`;
   }
   return url;
 });
 
-const copyLink = () => {
-  navigator.clipboard.writeText(generatedUrl.value);
-  copied.value = true;
-  setTimeout(() => (copied.value = false), 2500);
+const copyLink = async () => {
+  try {
+    await navigator.clipboard.writeText(generatedUrl.value);
+    copied.value = true;
+    setTimeout(() => (copied.value = false), 2500);
+  } catch (error) {
+    console.error('Unable to copy invitation link:', error);
+  }
 };
 
 const openPreview = () => {
@@ -142,6 +153,51 @@ const openPreview = () => {
               class="px-2.5 py-1 rounded-lg bg-secondary/10 border border-secondary/30 text-secondary-dark text-xs hover:bg-secondary/20 transition-colors cursor-pointer"
             >
               {{ name }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Target Page Selector -->
+        <div class="mb-5 text-left">
+          <label class="block text-xs font-semibold text-secondary-dark mb-1.5">
+            ទំព័រគោលដៅ (Target Page)
+          </label>
+          <div class="grid grid-cols-3 gap-1.5">
+            <button
+              type="button"
+              @click="targetPage = 'v1'"
+              class="py-2 px-2 rounded-xl text-xs font-medium border transition-all cursor-pointer text-center"
+              :class="
+                targetPage === 'v1'
+                  ? 'bg-secondary text-white border-secondary shadow-xs font-semibold'
+                  : 'bg-white/80 text-primary border-secondary/30 hover:bg-secondary/10'
+              "
+            >
+              លិខិត Ivory (V1)
+            </button>
+            <button
+              type="button"
+              @click="targetPage = 'v2'"
+              class="py-2 px-2 rounded-xl text-xs font-medium border transition-all cursor-pointer text-center"
+              :class="
+                targetPage === 'v2'
+                  ? 'bg-[#0F1E16] text-amber-200 border-amber-500/50 shadow-xs font-semibold'
+                  : 'bg-white/80 text-primary border-secondary/30 hover:bg-secondary/10'
+              "
+            >
+              Royal (V2)
+            </button>
+            <button
+              type="button"
+              @click="targetPage = 'countdown'"
+              class="py-2 px-2 rounded-xl text-xs font-medium border transition-all cursor-pointer text-center"
+              :class="
+                targetPage === 'countdown'
+                  ? 'bg-gradient-to-r from-secondary-dark to-secondary text-white border-secondary shadow-xs font-semibold'
+                  : 'bg-white/80 text-primary border-secondary/30 hover:bg-secondary/10'
+              "
+            >
+              រាប់ថយក្រោយ
             </button>
           </div>
         </div>

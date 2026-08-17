@@ -18,8 +18,8 @@ export function useMetadata() {
     const ogDesc = document.querySelector('meta[property="og:description"]');
     if (ogDesc) ogDesc.setAttribute('content', descText);
 
-    // Absolute Preview Image URL for Telegram Bot Parser
-    const fullImageUrl = `${window.location.origin}${import.meta.env.BASE_URL}images/seyha_david_1.jpg`;
+    // Keep this asset in public/images so the static and client-rendered preview agree.
+    const fullImageUrl = new URL('images/couple_3.JPG', window.location.href).href;
     const ogImg = document.querySelector('meta[property="og:image"]');
     if (ogImg) ogImg.setAttribute('content', fullImageUrl);
 
